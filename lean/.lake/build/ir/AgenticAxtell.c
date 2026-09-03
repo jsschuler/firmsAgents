@@ -1,6 +1,6 @@
 // Lean compiler output
 // Module: AgenticAxtell
-// Imports: Init AgenticAxtell.SemanticRecovery AgenticAxtell.Baseline.FixedGroup AgenticAxtell.Baseline.LinearBestResponse AgenticAxtell.Baseline.LinearStability AgenticAxtell.Baseline.NonlinearProduction AgenticAxtell.Baseline.NonlinearBestResponse
+// Imports: Init AgenticAxtell.SemanticRecovery AgenticAxtell.Baseline.FixedGroup AgenticAxtell.Baseline.LinearBestResponse AgenticAxtell.Baseline.LinearStability AgenticAxtell.Baseline.NonlinearProduction AgenticAxtell.Baseline.NonlinearBestResponse AgenticAxtell.Baseline.NonlinearFixedGroup
 #include <lean/lean.h>
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -20,6 +20,7 @@ lean_object* initialize_AgenticAxtell_Baseline_LinearBestResponse(uint8_t builti
 lean_object* initialize_AgenticAxtell_Baseline_LinearStability(uint8_t builtin, lean_object*);
 lean_object* initialize_AgenticAxtell_Baseline_NonlinearProduction(uint8_t builtin, lean_object*);
 lean_object* initialize_AgenticAxtell_Baseline_NonlinearBestResponse(uint8_t builtin, lean_object*);
+lean_object* initialize_AgenticAxtell_Baseline_NonlinearFixedGroup(uint8_t builtin, lean_object*);
 static bool _G_initialized = false;
 LEAN_EXPORT lean_object* initialize_AgenticAxtell(uint8_t builtin, lean_object* w) {
 lean_object * res;
@@ -44,6 +45,9 @@ res = initialize_AgenticAxtell_Baseline_NonlinearProduction(builtin, lean_io_mk_
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 res = initialize_AgenticAxtell_Baseline_NonlinearBestResponse(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_AgenticAxtell_Baseline_NonlinearFixedGroup(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 return lean_io_result_mk_ok(lean_box(0));

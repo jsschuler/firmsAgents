@@ -4,3 +4,4 @@ import AgenticAxtell.Baseline.LinearBestResponse
 import AgenticAxtell.Baseline.LinearStability
 import AgenticAxtell.Baseline.NonlinearProduction
 import AgenticAxtell.Baseline.NonlinearBestResponse
+import AgenticAxtell.Baseline.NonlinearFixedGroup

@@ -3,6 +3,6 @@
    ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell/Baseline/NonlinearBestResponse.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell/Baseline/NonlinearBestResponse.olean -i ././.lake/build/lib/lean/AgenticAxtell/Baseline/NonlinearBestResponse.ilean -c ././.lake/build/ir/AgenticAxtell/Baseline/NonlinearBestResponse.c --json",
    "level": "trace"},
   {"message":
-   "././././AgenticAxtell/Baseline/NonlinearBestResponse.lean:134:2: Try this: ring_nf",
+   "././././AgenticAxtell/Baseline/NonlinearBestResponse.lean:142:2: Try this: ring_nf",
    "level": "info"}],
- "depHash": "10471635018301475975"}
+ "depHash": "5478629247004922378"}
