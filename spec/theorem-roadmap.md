@@ -256,14 +256,150 @@ Implemented in the continuous semantic Lean scaffold:
     is consequently proved to take value zero there under the local
     decreasing-score condition. This identifies the precise base point and
     value for the forthcoming `ContinuousAt` theorem.
+59. Threshold continuity is completed. Continuity of the score-at-zero and
+    slope-margin functions supplies a common neighborhood in feasible-theta
+    space where the margin remains positive and the score surplus is small.
+    The unified selector estimate then proves the metric epsilon-delta
+    criterion, yielding `ContinuousAt` of the canonical nonlinear response at
+    the participation threshold under the local decreasing-score condition.
+60. Positive-branch preference comparative statics are formalized. An exact
+    finite-change identity shows that increasing `theta` raises the score by
+    the preference change times leisure-weighted marginal production plus
+    output. This coefficient is strictly positive at an interior root, so the
+    unique positive quadratic best-response root is strictly increasing in
+    `theta`. This order result supplies one side of the positive-branch
+    continuity argument.
+61. Positive-root stability is quantified. For increasing `theta`, the root
+    displacement times the terminal own-effort slope margin is bounded by the
+    direct score displacement at the initial root. This product inequality is
+    algebraic and needs no sign assumption on the margin. When the margin is
+    positive, division yields an explicit one-sided local Lipschitz bound for
+    the positive response root.
+62. The stability estimate is symmetrized across arbitrary pairs of preference
+    weights. The absolute root displacement times the slope margin at the
+    larger `theta` is bounded by the absolute preference displacement times
+    the larger endpoint score-sensitivity coefficient. A positive margin again
+    gives the corresponding divided two-sided Lipschitz bound. Equal and both
+    strict orderings are covered in one theorem.
+63. The symmetric Lipschitz estimate is lifted from abstract score roots to the
+    canonical nonlinear best-response selector. Endpoint crossing identifies
+    each selected response with its canonical positive root; the root
+    specifications then discharge all interiority and score-equation premises.
+    The resulting bound now applies directly to the response function used by
+    the fixed-group model.
+64. The remaining root-dependent score-sensitivity coefficient is uniformly
+    bounded on feasible effort. Marginal production and output are each
+    bounded by their values at maximal total effort `1 + othersEffort`, while
+    the leisure multiplier is at most one. The resulting primitive-parameter
+    bound is independent of the chosen response root.
+65. A named primitive sensitivity constant is introduced and substituted into
+    the symmetric root-stability inequality. The resulting bound controls the
+    absolute response-root displacement by absolute preference displacement
+    times this fixed constant, divided by the local slope margin. Its
+    right-hand side is now completely independent of both roots.
+66. The primitive root-independent estimate is lifted to the canonical
+    nonlinear selector, so selected best-response differences are controlled
+    directly without exposing the auxiliary canonical roots.
+67. Continuity on the strict positive-participation branch is completed. A
+    common neighborhood preserves positive score at zero, `theta<1`, and a
+    positive slope margin. The primitive selector estimate and its fixed
+    sensitivity constant then verify the metric epsilon-delta criterion at
+    every such preference weight.
+68. Continuity on the strict non-participation branch is completed. Strict
+    negativity of the score at zero and positivity of the slope margin persist
+    in a common neighborhood; throughout that neighborhood the uniqueness
+    theorem makes the canonical selector exactly zero. The response is
+    therefore locally constant and continuous.
+69. The branchwise continuity results are unified. Zero score at zero effort
+    is first proved equivalent to equality with the explicit participation
+    threshold. Trichotomy of the score then dispatches strict negativity to
+    local zero constancy, equality to threshold continuity, and strict
+    positivity to positive-root continuity. Thus the canonical feasible-theta
+    selector is continuous at every `theta<1` with positive own-effort slope
+    margin.
+70. The nonlinear fixed-group existence extension begins with quantitative
+    coworker-effort root stability. Under the uniform negative cross-effect
+    condition, increasing coworker effort lowers the positive response root;
+    its displacement times the terminal own-effort slope margin is bounded by
+    the direct coworker-score displacement at the initial root.
+71. Coworker-effort root stability is symmetrized. A named cross-sensitivity
+    coefficient expresses the magnitude of the negative coworker score effect;
+    arbitrary pairs of positive-root environments satisfy an absolute
+    displacement product bound using the larger coworker effort. When the
+    corresponding slope margin is positive, division gives a two-sided local
+    Lipschitz estimate.
+72. The coworker cross-sensitivity is uniformly bounded on bounded environments.
+    If both coworker totals are at most a common cap and own effort is feasible,
+    the root-dependent coefficient is bounded by a positive expression using
+    only the cap and primitive parameters. Substitution gives a symmetric
+    root-independent Lipschitz estimate suitable for fixed groups, where the
+    natural cap is group size minus one.
+73. The bounded coworker-effort Lipschitz estimate is lifted to the canonical
+    nonlinear selector. For any two positive coworker environments below a
+    common cap, selected best-response displacement is bounded directly by
+    coworker-effort displacement, the cap-dependent primitive sensitivity
+    constant, and the positive slope margin.
+74. The canonical selector is packaged as a scalar function of coworker effort,
+    and continuity is proved at every strictly positive environment on the
+    positive-participation branch. A common neighborhood preserves positive
+    coworker effort, positive score, a local effort cap, and the slope margin;
+    the bounded selector estimate then supplies the epsilon-delta proof.
+75. Coworker-effort continuity on the strict non-participation branch is
+    completed. Strict score negativity persists locally, and the uniform
+    cross-effect condition supplies the decreasing-score premise at every
+    nearby positive environment. The unique selected response is therefore
+    locally constant at zero.
+76. Coworker-effort continuity at an exact participation boundary is completed.
+    The reference selector is exactly zero. Nearby nonpositive-score
+    environments retain the zero response, while positive-score environments
+    have a positive root bounded by the score surplus divided by the slope
+    margin. Continuity follows uniformly across both sides of the boundary.
+77. The singular zero-coworker environment is given its own canonical positive
+    quadratic root. Its interiority and score equation follow from the
+    zero-coworker existence theorem, and zero-coworker best-response uniqueness
+    identifies the general nonlinear selector with this root. This supplies
+    the boundary data needed for one-sided coworker-effort continuity.
+78. The bounded coworker-effort stability estimate is extended across the
+    singular boundary pair from zero coworkers to a positive environment.
+    Rewriting both canonical selections to their respective roots yields a
+    root-independent displacement bound with the same cap-dependent
+    cross-sensitivity constant and positive slope margin.
+79. One-sided continuity at zero coworker effort is completed on the
+    economically meaningful nonnegative domain. Positive preference makes the
+    zero-environment score strictly positive; participation persists locally,
+    the slope margin weakly improves as coworker effort rises, and the
+    zero-to-positive selector bound verifies the subtype epsilon-delta
+    criterion.
+80. Scalar coworker-effort continuity is unified on the full nonnegative
+    domain. The zero environment uses one-sided continuity; every positive
+    environment is split by score trichotomy into strict non-participation,
+    exact participation, or strict participation. Restricting the real-domain
+    branch theorems to the subtype yields a globally continuous canonical
+    response function under the uniform negative cross-effect condition.
+81. Scalar continuity is lifted to a simultaneous self-map of the feasible
+    fixed-group effort cube. The coworker sum for each agent is defined as a
+    continuous nonnegative subtype-valued map. Coordinatewise composition with
+    the scalar response proves continuity of the full cube-valued nonlinear
+    best-response map, whose range remains feasible by construction.
+82. The remaining topological dependency is isolated as
+    `FeasibleCubeFixedPointPrinciple`, Brouwer's fixed-point principle
+    specialized to the finite feasible-profile cube. Assuming precisely this
+    principle, the continuous nonlinear cube response has a fixed point; after
+    forgetting subtype bounds, coordinatewise selector optimality proves that
+    profile is a fixed-group Nash equilibrium.
 
 The heterogeneous interior linear-response spectral argument is now complete.
-The next step is using the unified epsilon estimate to prove `ContinuousAt` for
-the feasible-theta selector at its participation threshold (with a locally
-positive slope margin). Any unconditional
-continuity/decreasing-response claim requires extra parameter restrictions or a
-separate argument because increasing returns can make the quadratic score
-initially rise.
+The preference-parameter continuity program is complete. Work now targets
+unconditional existence of a nonlinear fixed-group fixed point. The
+model-specific reduction from a continuous feasible-cube response to Nash
+existence is complete. The installed Mathlib snapshot does not expose a
+Brouwer or Schauder theorem for finite cubes, so the remaining gap is to import
+or formalize that topological result. An alternative is to impose a stronger
+quantitative restriction and prove the response is a contraction, allowing
+Mathlib's existing Banach fixed-point theorem to close the argument. Any
+unconditional continuity or decreasing-response claim outside the currently
+covered regime requires extra parameter restrictions or a separate argument,
+because increasing returns can make the quadratic score initially rise.
 Exact cross-language numerical tie equivalence is not claimed: Julia
 uses a tolerance and candidate-list order, while the semantic Lean layer uses
 exact real maximizers and finite-set enumeration. Finite-state results belong

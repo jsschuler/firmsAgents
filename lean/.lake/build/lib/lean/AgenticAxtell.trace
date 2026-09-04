@@ -2,4 +2,4 @@
  [{"message":
    ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell.olean -i ././.lake/build/lib/lean/AgenticAxtell.ilean -c ././.lake/build/ir/AgenticAxtell.c --json",
    "level": "trace"}],
- "depHash": "1932158732807134401"}
+ "depHash": "9626403109970275036"}

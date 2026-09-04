@@ -40,6 +40,55 @@ noncomputable def quadraticParticipationThreshold (params : Params)
     ((params.a * othersEffort + params.b * othersEffort ^ 2) +
       (params.a + 2 * params.b * othersEffort))
 
+/-- Root-independent upper bound for the quadratic score's sensitivity to the
+preference weight over feasible own effort. -/
+def quadraticThetaSensitivityBound (params : Params) (othersEffort : ℝ) : ℝ :=
+  (params.a + 2 * params.b * (1 + othersEffort)) +
+    (params.a * (1 + othersEffort) + params.b * (1 + othersEffort) ^ 2)
+
+/-- Magnitude of the negative coworker-effort cross effect in the quadratic
+score, evaluated at a feasible own effort and a pair of environments. -/
+def quadraticOthersSensitivity (params : Params)
+    (theta root firstOthers secondOthers : ℝ) : ℝ :=
+  (1 - theta) *
+      (params.a + 2 * params.b * root +
+        params.b * (firstOthers + secondOthers)) -
+    2 * params.b * theta * (1 - root)
+
+/-- Uniform upper bound for coworker-effort score sensitivity when each
+environment's total coworker effort is at most the supplied cap. -/
+def quadraticOthersSensitivityBound (params : Params)
+    (theta othersCap : ℝ) : ℝ :=
+  (1 - theta) * (params.a + 2 * params.b + 2 * params.b * othersCap)
+
+theorem quadraticOthersSensitivityBound_pos (params : Params)
+    (theta othersCap : ℝ) (aPositive : 0 < params.a)
+    (bNonnegative : 0 ≤ params.b) (thetaBelowOne : theta < 1)
+    (othersCapNonnegative : 0 ≤ othersCap) :
+    0 < quadraticOthersSensitivityBound params theta othersCap := by
+  unfold quadraticOthersSensitivityBound
+  have insidePositive :
+      0 < params.a + 2 * params.b + 2 * params.b * othersCap := by
+    have firstCooperativeNonnegative : 0 ≤ 2 * params.b := by positivity
+    have secondCooperativeNonnegative : 0 ≤ 2 * params.b * othersCap := by
+      positivity
+    linarith
+  exact mul_pos (sub_pos.mpr thetaBelowOne) insidePositive
+
+theorem quadraticThetaSensitivityBound_pos (params : Params) (othersEffort : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (othersNonnegative : 0 ≤ othersEffort) :
+    0 < quadraticThetaSensitivityBound params othersEffort := by
+  unfold quadraticThetaSensitivityBound
+  have totalPositive : 0 < 1 + othersEffort := by linarith
+  have marginalCooperativeNonnegative :
+      0 ≤ 2 * params.b * (1 + othersEffort) := by positivity
+  have outputLinearPositive : 0 < params.a * (1 + othersEffort) :=
+    mul_pos aPositive totalPositive
+  have outputCooperativeNonnegative :
+      0 ≤ params.b * (1 + othersEffort) ^ 2 := by positivity
+  linarith
+
 theorem log_utility_eq_logUtility (params : Params)
     (theta effort othersEffort : ℝ) (firmSize : Nat)
     (incomePositive : 0 < production params (effort + othersEffort) / firmSize)
@@ -228,6 +277,107 @@ theorem nonlinearFirstOrderScore_beta_two_others_sub (params : Params)
     nonlinearFirstOrderScore_beta_two params theta effort firstOthers betaTwo]
   ring
 
+/-- Exact effect of changing the preference weight at fixed efforts. The
+coefficient is the sum of the leisure-weighted marginal product and output. -/
+theorem nonlinearFirstOrderScore_theta_sub (params : Params)
+    (firstTheta secondTheta effort othersEffort : ℝ) :
+    nonlinearFirstOrderScore params secondTheta effort othersEffort -
+        nonlinearFirstOrderScore params firstTheta effort othersEffort =
+      (secondTheta - firstTheta) *
+        ((1 - effort) * marginalProduction params (effort + othersEffort) +
+          production params (effort + othersEffort)) := by
+  unfold nonlinearFirstOrderScore
+  ring
+
+/-- The score sensitivity to `theta` is uniformly bounded over feasible own
+effort by evaluating both marginal production and output at maximal total
+effort. -/
+theorem beta_two_theta_scoreSensitivity_le_feasible_bound
+    (params : Params) (effort othersEffort : ℝ) (betaTwo : params.beta = 2)
+    (aNonnegative : 0 ≤ params.a) (bNonnegative : 0 ≤ params.b)
+    (effortNonnegative : 0 ≤ effort) (effortAtMostOne : effort ≤ 1)
+    (othersNonnegative : 0 ≤ othersEffort) :
+    (1 - effort) * marginalProduction params (effort + othersEffort) +
+        production params (effort + othersEffort) ≤
+      quadraticThetaSensitivityBound params othersEffort := by
+  have totalNonnegative : 0 ≤ effort + othersEffort := by linarith
+  have totalAtMost : effort + othersEffort ≤ 1 + othersEffort := by linarith
+  have maximalTotalNonnegative : 0 ≤ 1 + othersEffort := by linarith
+  have squareAtMost :
+      (effort + othersEffort) ^ 2 ≤ (1 + othersEffort) ^ 2 :=
+    (sq_le_sq₀ totalNonnegative maximalTotalNonnegative).2 totalAtMost
+  have marginalExpansion :
+      marginalProduction params (effort + othersEffort) =
+        params.a + 2 * params.b * (effort + othersEffort) := by
+    unfold marginalProduction
+    rw [betaTwo]
+    rw [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]
+    ring
+  have outputExpansion :
+      production params (effort + othersEffort) =
+        params.a * (effort + othersEffort) +
+          params.b * (effort + othersEffort) ^ 2 := by
+    unfold production
+    rw [betaTwo, Real.rpow_two]
+  have marginalNonnegative :
+      0 ≤ marginalProduction params (effort + othersEffort) := by
+    rw [marginalExpansion]
+    positivity
+  have marginalAtMost :
+      marginalProduction params (effort + othersEffort) ≤
+        params.a + 2 * params.b * (1 + othersEffort) := by
+    rw [marginalExpansion]
+    exact add_le_add_left
+      (mul_le_mul_of_nonneg_left totalAtMost
+        (mul_nonneg (by norm_num) bNonnegative)) params.a
+  have outputAtMost :
+      production params (effort + othersEffort) ≤
+        params.a * (1 + othersEffort) +
+          params.b * (1 + othersEffort) ^ 2 := by
+    rw [outputExpansion]
+    exact add_le_add
+      (mul_le_mul_of_nonneg_left totalAtMost aNonnegative)
+      (mul_le_mul_of_nonneg_left squareAtMost bNonnegative)
+  have leisureAtMostOne : 1 - effort ≤ 1 := by linarith
+  have weightedMarginalAtMost :
+      (1 - effort) * marginalProduction params (effort + othersEffort) ≤
+        params.a + 2 * params.b * (1 + othersEffort) :=
+    le_trans (mul_le_mul_of_nonneg_right leisureAtMostOne marginalNonnegative)
+      (by simpa using marginalAtMost)
+  unfold quadraticThetaSensitivityBound
+  linarith
+
+theorem quadraticOthersSensitivity_le_bounded
+    (params : Params) (theta root firstOthers secondOthers othersCap : ℝ)
+    (bNonnegative : 0 ≤ params.b) (thetaNonnegative : 0 ≤ theta)
+    (thetaAtMostOne : theta ≤ 1) (rootAtMostOne : root ≤ 1)
+    (firstOthersAtMost : firstOthers ≤ othersCap)
+    (secondOthersAtMost : secondOthers ≤ othersCap) :
+    quadraticOthersSensitivity params theta root firstOthers secondOthers ≤
+      quadraticOthersSensitivityBound params theta othersCap := by
+  have leisureNonnegative : 0 ≤ 1 - root := by linarith
+  have negativeTermNonnegative :
+      0 ≤ 2 * params.b * theta * (1 - root) := by positivity
+  have rootTermAtMost : 2 * params.b * root ≤ 2 * params.b := by
+    have coefficientNonnegative : 0 ≤ 2 * params.b := by positivity
+    nlinarith
+  have othersSumAtMost : firstOthers + secondOthers ≤ 2 * othersCap := by
+    linarith
+  have othersTermAtMost :
+      params.b * (firstOthers + secondOthers) ≤
+        2 * params.b * othersCap := by
+    have multiplied := mul_le_mul_of_nonneg_left othersSumAtMost bNonnegative
+    nlinarith
+  have insideAtMost :
+      params.a + 2 * params.b * root +
+          params.b * (firstOthers + secondOthers) ≤
+        params.a + 2 * params.b + 2 * params.b * othersCap := by
+    linarith
+  have weightedAtMost :=
+    mul_le_mul_of_nonneg_left insideAtMost (sub_nonneg.mpr thetaAtMostOne)
+  unfold quadraticOthersSensitivity quadraticOthersSensitivityBound
+  linarith
+
 /-- A simple root-independent parameter bound that makes the coworker-effort
 cross effect negative throughout feasible own effort and nonnegative coworker
 effort. -/
@@ -357,6 +507,299 @@ theorem beta_two_score_negative_after_positiveRoot (params : Params)
   have effortMinusRootPositive : 0 < effort - root := sub_pos.mpr rootLtEffort
   nlinarith [mul_neg_of_pos_of_neg effortMinusRootPositive rootEffortBracketNegative]
 
+/-- On the positive-participation branch, the quadratic response root strictly
+increases with the agent's preference weight. -/
+theorem beta_two_positive_scoreRoot_strictMono_theta
+    (params : Params) (firstTheta secondTheta othersEffort firstRoot secondRoot : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (secondThetaNonnegative : 0 ≤ secondTheta)
+    (thetaIncrease : firstTheta < secondTheta)
+    (othersNonnegative : 0 ≤ othersEffort) (betaTwo : params.beta = 2)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params secondTheta 0 othersEffort)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootBelowOne : firstRoot < 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params firstTheta firstRoot othersEffort = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params secondTheta secondRoot othersEffort = 0) :
+    firstRoot < secondRoot := by
+  have totalPositive : 0 < firstRoot + othersEffort := by linarith
+  have marginalPositive :
+      0 < marginalProduction params (firstRoot + othersEffort) := by
+    unfold marginalProduction
+    rw [betaTwo]
+    norm_num [Real.rpow_one]
+    have cooperativeNonnegative :
+        0 ≤ 2 * params.b * (firstRoot + othersEffort) := by positivity
+    linarith
+  have outputPositive : 0 < production params (firstRoot + othersEffort) :=
+    production_positive_of_a_pos params _ aPositive bNonnegative totalPositive
+  have coefficientPositive :
+      0 < (1 - firstRoot) * marginalProduction params (firstRoot + othersEffort) +
+        production params (firstRoot + othersEffort) := by
+    have firstTermPositive :
+        0 < (1 - firstRoot) * marginalProduction params
+          (firstRoot + othersEffort) :=
+      mul_pos (sub_pos.mpr firstRootBelowOne) marginalPositive
+    linarith
+  have scoreAtFirstRootPositive :
+      0 < nonlinearFirstOrderScore params secondTheta firstRoot othersEffort := by
+    have difference := nonlinearFirstOrderScore_theta_sub params firstTheta
+      secondTheta firstRoot othersEffort
+    rw [firstRootEquation] at difference
+    nlinarith [mul_pos (sub_pos.mpr thetaIncrease) coefficientPositive]
+  rcases lt_trichotomy firstRoot secondRoot with rootIncrease | rootsEqual | rootDecrease
+  · exact rootIncrease
+  · subst secondRoot
+    rw [secondRootEquation] at scoreAtFirstRootPositive
+    linarith
+  · have scoreNegative := beta_two_score_negative_after_positiveRoot params
+      secondTheta othersEffort secondRoot firstRoot betaTwo bNonnegative
+      secondThetaNonnegative secondScoreAtZeroPositive secondRootPositive
+      secondRootEquation rootDecrease
+    linarith
+
+/-- Quantitative root stability for an increase in the preference weight. The
+root displacement times the terminal slope margin is bounded by the direct
+score displacement evaluated at the first root. -/
+theorem beta_two_positive_scoreRoot_theta_increase_bound
+    (params : Params) (firstTheta secondTheta othersEffort firstRoot secondRoot : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (secondThetaNonnegative : 0 ≤ secondTheta)
+    (thetaIncrease : firstTheta < secondTheta)
+    (othersNonnegative : 0 ≤ othersEffort) (betaTwo : params.beta = 2)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params secondTheta 0 othersEffort)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootBelowOne : firstRoot < 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params firstTheta firstRoot othersEffort = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params secondTheta secondRoot othersEffort = 0) :
+    (secondRoot - firstRoot) *
+        (params.a - 2 * params.b * (secondTheta - othersEffort)) ≤
+      (secondTheta - firstTheta) *
+        ((1 - firstRoot) * marginalProduction params (firstRoot + othersEffort) +
+          production params (firstRoot + othersEffort)) := by
+  have rootIncrease := beta_two_positive_scoreRoot_strictMono_theta params
+    firstTheta secondTheta othersEffort firstRoot secondRoot aPositive bNonnegative
+    secondThetaNonnegative thetaIncrease othersNonnegative betaTwo
+    secondScoreAtZeroPositive firstRootPositive secondRootPositive
+    firstRootBelowOne firstRootEquation secondRootEquation
+  have ownDifference := nonlinearFirstOrderScore_beta_two_sub params secondTheta
+    othersEffort firstRoot secondRoot betaTwo
+  rw [secondRootEquation] at ownDifference
+  have thetaDifference := nonlinearFirstOrderScore_theta_sub params firstTheta
+    secondTheta firstRoot othersEffort
+  rw [firstRootEquation] at thetaDifference
+  have thetaAtLeastMinusOne : -1 ≤ secondTheta := by linarith
+  have rootsSumNonnegative : 0 ≤ firstRoot + secondRoot := by linarith
+  have curvatureCorrectionNonnegative :
+      0 ≤ params.b * (1 + secondTheta) * (firstRoot + secondRoot) := by
+    positivity
+  nlinarith
+
+theorem beta_two_positive_scoreRoot_theta_increase_le_div_margin
+    (params : Params) (firstTheta secondTheta othersEffort firstRoot secondRoot : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (secondThetaNonnegative : 0 ≤ secondTheta)
+    (thetaIncrease : firstTheta < secondTheta)
+    (othersNonnegative : 0 ≤ othersEffort) (betaTwo : params.beta = 2)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params secondTheta 0 othersEffort)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootBelowOne : firstRoot < 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params firstTheta firstRoot othersEffort = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params secondTheta secondRoot othersEffort = 0)
+    (slopeMarginPositive :
+      2 * params.b * (secondTheta - othersEffort) < params.a) :
+    secondRoot - firstRoot ≤
+      ((secondTheta - firstTheta) *
+          ((1 - firstRoot) * marginalProduction params
+              (firstRoot + othersEffort) +
+            production params (firstRoot + othersEffort))) /
+        (params.a - 2 * params.b * (secondTheta - othersEffort)) := by
+  apply (le_div_iff₀ (sub_pos.mpr slopeMarginPositive)).2
+  exact beta_two_positive_scoreRoot_theta_increase_bound params firstTheta
+    secondTheta othersEffort firstRoot secondRoot aPositive bNonnegative
+    secondThetaNonnegative thetaIncrease othersNonnegative betaTwo
+    secondScoreAtZeroPositive firstRootPositive secondRootPositive
+    firstRootBelowOne firstRootEquation secondRootEquation
+
+/-- Symmetric stability estimate for two positive roots. The slope margin is
+evaluated at the larger preference weight, and the direct score sensitivity is
+bounded by the larger endpoint coefficient. -/
+theorem beta_two_positive_scoreRoot_abs_sub_mul_margin_le
+    (params : Params) (firstTheta secondTheta othersEffort firstRoot secondRoot : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (firstThetaNonnegative : 0 ≤ firstTheta)
+    (secondThetaNonnegative : 0 ≤ secondTheta)
+    (othersNonnegative : 0 ≤ othersEffort) (betaTwo : params.beta = 2)
+    (firstScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params firstTheta 0 othersEffort)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params secondTheta 0 othersEffort)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootBelowOne : firstRoot < 1) (secondRootBelowOne : secondRoot < 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params firstTheta firstRoot othersEffort = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params secondTheta secondRoot othersEffort = 0) :
+    |secondRoot - firstRoot| *
+        (params.a - 2 * params.b * (max firstTheta secondTheta - othersEffort)) ≤
+      |secondTheta - firstTheta| *
+        max
+          ((1 - firstRoot) * marginalProduction params
+              (firstRoot + othersEffort) +
+            production params (firstRoot + othersEffort))
+          ((1 - secondRoot) * marginalProduction params
+              (secondRoot + othersEffort) +
+            production params (secondRoot + othersEffort)) := by
+  rcases lt_trichotomy firstTheta secondTheta with thetaIncrease | thetaEqual |
+      thetaDecrease
+  · have rootIncrease := beta_two_positive_scoreRoot_strictMono_theta params
+      firstTheta secondTheta othersEffort firstRoot secondRoot aPositive bNonnegative
+      secondThetaNonnegative thetaIncrease othersNonnegative betaTwo
+      secondScoreAtZeroPositive firstRootPositive secondRootPositive
+      firstRootBelowOne firstRootEquation secondRootEquation
+    have bound := beta_two_positive_scoreRoot_theta_increase_bound params
+      firstTheta secondTheta othersEffort firstRoot secondRoot aPositive bNonnegative
+      secondThetaNonnegative thetaIncrease othersNonnegative betaTwo
+      secondScoreAtZeroPositive firstRootPositive secondRootPositive
+      firstRootBelowOne firstRootEquation secondRootEquation
+    rw [max_eq_right thetaIncrease.le, abs_of_pos (sub_pos.mpr rootIncrease),
+      abs_of_pos (sub_pos.mpr thetaIncrease)]
+    exact le_trans bound (mul_le_mul_of_nonneg_left (le_max_left _ _)
+      (sub_nonneg.mpr thetaIncrease.le))
+  · subst secondTheta
+    have rootsEqual := positive_beta_two_scoreRoot_unique params firstTheta
+      othersEffort firstRoot secondRoot betaTwo bNonnegative firstThetaNonnegative
+      firstScoreAtZeroPositive firstRootPositive secondRootPositive
+      firstRootEquation secondRootEquation
+    subst secondRoot
+    simp
+  · have rootDecrease := beta_two_positive_scoreRoot_strictMono_theta params
+      secondTheta firstTheta othersEffort secondRoot firstRoot aPositive bNonnegative
+      firstThetaNonnegative thetaDecrease othersNonnegative betaTwo
+      firstScoreAtZeroPositive secondRootPositive firstRootPositive
+      secondRootBelowOne secondRootEquation firstRootEquation
+    have bound := beta_two_positive_scoreRoot_theta_increase_bound params
+      secondTheta firstTheta othersEffort secondRoot firstRoot aPositive bNonnegative
+      firstThetaNonnegative thetaDecrease othersNonnegative betaTwo
+      firstScoreAtZeroPositive secondRootPositive firstRootPositive
+      secondRootBelowOne secondRootEquation firstRootEquation
+    rw [max_eq_left thetaDecrease.le, abs_of_neg (sub_neg.mpr rootDecrease),
+      abs_of_neg (sub_neg.mpr thetaDecrease)]
+    have upper := mul_le_mul_of_nonneg_left (le_max_right
+      ((1 - firstRoot) * marginalProduction params (firstRoot + othersEffort) +
+        production params (firstRoot + othersEffort))
+      ((1 - secondRoot) * marginalProduction params (secondRoot + othersEffort) +
+        production params (secondRoot + othersEffort)))
+      (sub_nonneg.mpr thetaDecrease.le)
+    nlinarith
+
+theorem beta_two_positive_scoreRoot_abs_sub_le_div_margin
+    (params : Params) (firstTheta secondTheta othersEffort firstRoot secondRoot : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (firstThetaNonnegative : 0 ≤ firstTheta)
+    (secondThetaNonnegative : 0 ≤ secondTheta)
+    (othersNonnegative : 0 ≤ othersEffort) (betaTwo : params.beta = 2)
+    (firstScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params firstTheta 0 othersEffort)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params secondTheta 0 othersEffort)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootBelowOne : firstRoot < 1) (secondRootBelowOne : secondRoot < 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params firstTheta firstRoot othersEffort = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params secondTheta secondRoot othersEffort = 0)
+    (slopeMarginPositive :
+      2 * params.b * (max firstTheta secondTheta - othersEffort) < params.a) :
+    |secondRoot - firstRoot| ≤
+      (|secondTheta - firstTheta| *
+        max
+          ((1 - firstRoot) * marginalProduction params
+              (firstRoot + othersEffort) +
+            production params (firstRoot + othersEffort))
+          ((1 - secondRoot) * marginalProduction params
+              (secondRoot + othersEffort) +
+            production params (secondRoot + othersEffort))) /
+        (params.a - 2 * params.b * (max firstTheta secondTheta - othersEffort)) := by
+  apply (le_div_iff₀ (sub_pos.mpr slopeMarginPositive)).2
+  exact beta_two_positive_scoreRoot_abs_sub_mul_margin_le params firstTheta
+    secondTheta othersEffort firstRoot secondRoot aPositive bNonnegative
+    firstThetaNonnegative secondThetaNonnegative othersNonnegative betaTwo
+    firstScoreAtZeroPositive secondScoreAtZeroPositive firstRootPositive
+    secondRootPositive firstRootBelowOne secondRootBelowOne firstRootEquation
+    secondRootEquation
+
+/-- Root-independent symmetric stability bound obtained by replacing both
+endpoint sensitivities with their common feasible-effort upper bound. -/
+theorem beta_two_positive_scoreRoot_abs_sub_le_uniform_div_margin
+    (params : Params) (firstTheta secondTheta othersEffort firstRoot secondRoot : ℝ)
+    (aPositive : 0 < params.a) (bNonnegative : 0 ≤ params.b)
+    (firstThetaNonnegative : 0 ≤ firstTheta)
+    (secondThetaNonnegative : 0 ≤ secondTheta)
+    (othersNonnegative : 0 ≤ othersEffort) (betaTwo : params.beta = 2)
+    (firstScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params firstTheta 0 othersEffort)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params secondTheta 0 othersEffort)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootBelowOne : firstRoot < 1) (secondRootBelowOne : secondRoot < 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params firstTheta firstRoot othersEffort = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params secondTheta secondRoot othersEffort = 0)
+    (slopeMarginPositive :
+      2 * params.b * (max firstTheta secondTheta - othersEffort) < params.a) :
+    |secondRoot - firstRoot| ≤
+      |secondTheta - firstTheta| *
+          quadraticThetaSensitivityBound params othersEffort /
+        (params.a - 2 * params.b * (max firstTheta secondTheta - othersEffort)) := by
+  have detailed := beta_two_positive_scoreRoot_abs_sub_le_div_margin params
+    firstTheta secondTheta othersEffort firstRoot secondRoot aPositive bNonnegative
+    firstThetaNonnegative secondThetaNonnegative othersNonnegative betaTwo
+    firstScoreAtZeroPositive secondScoreAtZeroPositive firstRootPositive
+    secondRootPositive firstRootBelowOne secondRootBelowOne firstRootEquation
+    secondRootEquation slopeMarginPositive
+  have firstSensitivityBound :=
+    beta_two_theta_scoreSensitivity_le_feasible_bound params firstRoot othersEffort
+      betaTwo aPositive.le bNonnegative firstRootPositive.le firstRootBelowOne.le
+      othersNonnegative
+  have secondSensitivityBound :=
+    beta_two_theta_scoreSensitivity_le_feasible_bound params secondRoot othersEffort
+      betaTwo aPositive.le bNonnegative secondRootPositive.le secondRootBelowOne.le
+      othersNonnegative
+  have maximumBound :
+      max
+          ((1 - firstRoot) * marginalProduction params
+              (firstRoot + othersEffort) +
+            production params (firstRoot + othersEffort))
+          ((1 - secondRoot) * marginalProduction params
+              (secondRoot + othersEffort) +
+            production params (secondRoot + othersEffort)) ≤
+        quadraticThetaSensitivityBound params othersEffort :=
+    max_le firstSensitivityBound secondSensitivityBound
+  have numeratorBound :
+      |secondTheta - firstTheta| *
+          max
+            ((1 - firstRoot) * marginalProduction params
+                (firstRoot + othersEffort) +
+              production params (firstRoot + othersEffort))
+            ((1 - secondRoot) * marginalProduction params
+                (secondRoot + othersEffort) +
+              production params (secondRoot + othersEffort)) ≤
+        |secondTheta - firstTheta| *
+          quadraticThetaSensitivityBound params othersEffort :=
+    mul_le_mul_of_nonneg_left maximumBound (abs_nonneg _)
+  exact le_trans detailed (div_le_div_of_nonneg_right numeratorBound
+    (sub_pos.mpr slopeMarginPositive).le)
+
 /-- Positive quadratic score roots decrease with coworker effort whenever the
 free-riding term dominates the cooperative marginal-product term at the first
 root. -/
@@ -419,6 +862,217 @@ theorem beta_two_positive_scoreRoot_decreases_of_uniform_bound
     firstOthers secondOthers firstRoot secondRoot betaTwo bNonnegative thetaNonnegative
     othersIncrease secondScoreAtZeroPositive firstRootPositive secondRootPositive
     firstRootEquation secondRootEquation crossEffectNegative
+
+/-- Quantitative stability of positive roots as coworker effort increases.
+The response displacement times the terminal own-effort slope margin is bounded
+by the direct coworker-score displacement at the initial root. -/
+theorem beta_two_positive_scoreRoot_others_increase_bound
+    (params : Params) (theta firstOthers secondOthers firstRoot secondRoot : ℝ)
+    (betaTwo : params.beta = 2) (bNonnegative : 0 ≤ params.b)
+    (thetaNonnegative : 0 ≤ theta) (thetaAtMostOne : theta ≤ 1)
+    (firstOthersNonnegative : 0 ≤ firstOthers)
+    (othersIncrease : firstOthers < secondOthers)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 secondOthers)
+    (firstRootPositive : 0 < firstRoot) (firstRootAtMostOne : firstRoot ≤ 1)
+    (secondRootPositive : 0 < secondRoot)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params theta firstRoot firstOthers = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params theta secondRoot secondOthers = 0)
+    (uniformBound : 2 * params.b * theta < (1 - theta) * params.a) :
+    (firstRoot - secondRoot) *
+        (params.a - 2 * params.b * (theta - secondOthers)) ≤
+      (secondOthers - firstOthers) *
+        quadraticOthersSensitivity params theta firstRoot firstOthers
+          secondOthers := by
+  have rootDecrease := beta_two_positive_scoreRoot_decreases_of_uniform_bound
+    params theta firstOthers secondOthers firstRoot secondRoot betaTwo
+    bNonnegative thetaNonnegative thetaAtMostOne firstOthersNonnegative
+    othersIncrease secondScoreAtZeroPositive firstRootPositive firstRootAtMostOne
+    secondRootPositive firstRootEquation secondRootEquation uniformBound
+  have ownDifference := nonlinearFirstOrderScore_beta_two_sub params theta
+    secondOthers secondRoot firstRoot betaTwo
+  rw [secondRootEquation] at ownDifference
+  have othersDifference := nonlinearFirstOrderScore_beta_two_others_sub params theta
+    firstRoot firstOthers secondOthers betaTwo
+  rw [firstRootEquation] at othersDifference
+  have secondOthersNonnegative : 0 ≤ secondOthers :=
+    le_trans firstOthersNonnegative othersIncrease.le
+  have curvatureCorrectionNonnegative :
+      0 ≤ params.b * (1 + theta) * (firstRoot + secondRoot) := by positivity
+  unfold quadraticOthersSensitivity
+  nlinarith
+
+/-- Symmetric coworker-effort stability estimate for arbitrary ordering of two
+positive-root environments. -/
+theorem beta_two_positive_scoreRoot_others_abs_sub_mul_margin_le
+    (params : Params) (theta firstOthers secondOthers firstRoot secondRoot : ℝ)
+    (betaTwo : params.beta = 2) (bNonnegative : 0 ≤ params.b)
+    (thetaNonnegative : 0 ≤ theta) (thetaAtMostOne : theta ≤ 1)
+    (firstOthersNonnegative : 0 ≤ firstOthers)
+    (secondOthersNonnegative : 0 ≤ secondOthers)
+    (firstScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 firstOthers)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 secondOthers)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootAtMostOne : firstRoot ≤ 1) (secondRootAtMostOne : secondRoot ≤ 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params theta firstRoot firstOthers = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params theta secondRoot secondOthers = 0)
+    (uniformBound : 2 * params.b * theta < (1 - theta) * params.a) :
+    |secondRoot - firstRoot| *
+        (params.a - 2 * params.b *
+          (theta - max firstOthers secondOthers)) ≤
+      |secondOthers - firstOthers| *
+        max
+          (quadraticOthersSensitivity params theta firstRoot firstOthers
+            secondOthers)
+          (quadraticOthersSensitivity params theta secondRoot firstOthers
+            secondOthers) := by
+  rcases lt_trichotomy firstOthers secondOthers with othersIncrease | othersEqual |
+      othersDecrease
+  · have rootDecrease := beta_two_positive_scoreRoot_decreases_of_uniform_bound
+      params theta firstOthers secondOthers firstRoot secondRoot betaTwo
+      bNonnegative thetaNonnegative thetaAtMostOne firstOthersNonnegative
+      othersIncrease secondScoreAtZeroPositive firstRootPositive firstRootAtMostOne
+      secondRootPositive firstRootEquation secondRootEquation uniformBound
+    have bound := beta_two_positive_scoreRoot_others_increase_bound params theta
+      firstOthers secondOthers firstRoot secondRoot betaTwo bNonnegative
+      thetaNonnegative thetaAtMostOne firstOthersNonnegative othersIncrease
+      secondScoreAtZeroPositive firstRootPositive firstRootAtMostOne
+      secondRootPositive firstRootEquation secondRootEquation uniformBound
+    rw [max_eq_right othersIncrease.le, abs_of_neg (sub_neg.mpr rootDecrease),
+      abs_of_pos (sub_pos.mpr othersIncrease)]
+    have upper := mul_le_mul_of_nonneg_left (le_max_left
+      (quadraticOthersSensitivity params theta firstRoot firstOthers secondOthers)
+      (quadraticOthersSensitivity params theta secondRoot firstOthers secondOthers))
+      (sub_nonneg.mpr othersIncrease.le)
+    nlinarith
+  · subst secondOthers
+    have rootsEqual := positive_beta_two_scoreRoot_unique params theta firstOthers
+      firstRoot secondRoot betaTwo bNonnegative thetaNonnegative
+      firstScoreAtZeroPositive firstRootPositive secondRootPositive
+      firstRootEquation secondRootEquation
+    subst secondRoot
+    simp
+  · have rootIncrease := beta_two_positive_scoreRoot_decreases_of_uniform_bound
+      params theta secondOthers firstOthers secondRoot firstRoot betaTwo
+      bNonnegative thetaNonnegative thetaAtMostOne secondOthersNonnegative
+      othersDecrease firstScoreAtZeroPositive secondRootPositive
+      secondRootAtMostOne firstRootPositive secondRootEquation firstRootEquation
+      uniformBound
+    have bound := beta_two_positive_scoreRoot_others_increase_bound params theta
+      secondOthers firstOthers secondRoot firstRoot betaTwo bNonnegative
+      thetaNonnegative thetaAtMostOne secondOthersNonnegative othersDecrease
+      firstScoreAtZeroPositive secondRootPositive secondRootAtMostOne
+      firstRootPositive secondRootEquation firstRootEquation uniformBound
+    rw [max_eq_left othersDecrease.le, abs_of_pos (sub_pos.mpr rootIncrease),
+      abs_of_neg (sub_neg.mpr othersDecrease)]
+    have upper := mul_le_mul_of_nonneg_left (le_max_right
+      (quadraticOthersSensitivity params theta firstRoot firstOthers secondOthers)
+      (quadraticOthersSensitivity params theta secondRoot firstOthers secondOthers))
+      (sub_nonneg.mpr othersDecrease.le)
+    dsimp [quadraticOthersSensitivity] at bound upper ⊢
+    nlinarith
+
+theorem beta_two_positive_scoreRoot_others_abs_sub_le_div_margin
+    (params : Params) (theta firstOthers secondOthers firstRoot secondRoot : ℝ)
+    (betaTwo : params.beta = 2) (bNonnegative : 0 ≤ params.b)
+    (thetaNonnegative : 0 ≤ theta) (thetaAtMostOne : theta ≤ 1)
+    (firstOthersNonnegative : 0 ≤ firstOthers)
+    (secondOthersNonnegative : 0 ≤ secondOthers)
+    (firstScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 firstOthers)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 secondOthers)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootAtMostOne : firstRoot ≤ 1) (secondRootAtMostOne : secondRoot ≤ 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params theta firstRoot firstOthers = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params theta secondRoot secondOthers = 0)
+    (uniformBound : 2 * params.b * theta < (1 - theta) * params.a)
+    (slopeMarginPositive :
+      2 * params.b * (theta - max firstOthers secondOthers) < params.a) :
+    |secondRoot - firstRoot| ≤
+      (|secondOthers - firstOthers| *
+        max
+          (quadraticOthersSensitivity params theta firstRoot firstOthers
+            secondOthers)
+          (quadraticOthersSensitivity params theta secondRoot firstOthers
+            secondOthers)) /
+        (params.a - 2 * params.b *
+          (theta - max firstOthers secondOthers)) := by
+  apply (le_div_iff₀ (sub_pos.mpr slopeMarginPositive)).2
+  exact beta_two_positive_scoreRoot_others_abs_sub_mul_margin_le params theta
+    firstOthers secondOthers firstRoot secondRoot betaTwo bNonnegative
+    thetaNonnegative thetaAtMostOne firstOthersNonnegative secondOthersNonnegative
+    firstScoreAtZeroPositive secondScoreAtZeroPositive firstRootPositive
+    secondRootPositive firstRootAtMostOne secondRootAtMostOne firstRootEquation
+    secondRootEquation uniformBound
+
+theorem beta_two_positive_scoreRoot_others_abs_sub_le_uniform_div_margin
+    (params : Params)
+    (theta firstOthers secondOthers othersCap firstRoot secondRoot : ℝ)
+    (betaTwo : params.beta = 2) (bNonnegative : 0 ≤ params.b)
+    (thetaNonnegative : 0 ≤ theta) (thetaAtMostOne : theta ≤ 1)
+    (firstOthersNonnegative : 0 ≤ firstOthers)
+    (secondOthersNonnegative : 0 ≤ secondOthers)
+    (firstOthersAtMost : firstOthers ≤ othersCap)
+    (secondOthersAtMost : secondOthers ≤ othersCap)
+    (firstScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 firstOthers)
+    (secondScoreAtZeroPositive :
+      0 < nonlinearFirstOrderScore params theta 0 secondOthers)
+    (firstRootPositive : 0 < firstRoot) (secondRootPositive : 0 < secondRoot)
+    (firstRootAtMostOne : firstRoot ≤ 1) (secondRootAtMostOne : secondRoot ≤ 1)
+    (firstRootEquation :
+      nonlinearFirstOrderScore params theta firstRoot firstOthers = 0)
+    (secondRootEquation :
+      nonlinearFirstOrderScore params theta secondRoot secondOthers = 0)
+    (uniformBound : 2 * params.b * theta < (1 - theta) * params.a)
+    (slopeMarginPositive :
+      2 * params.b * (theta - max firstOthers secondOthers) < params.a) :
+    |secondRoot - firstRoot| ≤
+      |secondOthers - firstOthers| *
+          quadraticOthersSensitivityBound params theta othersCap /
+        (params.a - 2 * params.b *
+          (theta - max firstOthers secondOthers)) := by
+  have detailed := beta_two_positive_scoreRoot_others_abs_sub_le_div_margin
+    params theta firstOthers secondOthers firstRoot secondRoot betaTwo bNonnegative
+    thetaNonnegative thetaAtMostOne firstOthersNonnegative secondOthersNonnegative
+    firstScoreAtZeroPositive secondScoreAtZeroPositive firstRootPositive
+    secondRootPositive firstRootAtMostOne secondRootAtMostOne firstRootEquation
+    secondRootEquation uniformBound slopeMarginPositive
+  have firstSensitivityBound := quadraticOthersSensitivity_le_bounded params theta
+    firstRoot firstOthers secondOthers othersCap bNonnegative thetaNonnegative
+    thetaAtMostOne firstRootAtMostOne firstOthersAtMost secondOthersAtMost
+  have secondSensitivityBound := quadraticOthersSensitivity_le_bounded params theta
+    secondRoot firstOthers secondOthers othersCap bNonnegative thetaNonnegative
+    thetaAtMostOne secondRootAtMostOne firstOthersAtMost secondOthersAtMost
+  have maximumBound :
+      max
+          (quadraticOthersSensitivity params theta firstRoot firstOthers
+            secondOthers)
+          (quadraticOthersSensitivity params theta secondRoot firstOthers
+            secondOthers) ≤
+        quadraticOthersSensitivityBound params theta othersCap :=
+    max_le firstSensitivityBound secondSensitivityBound
+  have numeratorBound :
+      |secondOthers - firstOthers| *
+          max
+            (quadraticOthersSensitivity params theta firstRoot firstOthers
+              secondOthers)
+            (quadraticOthersSensitivity params theta secondRoot firstOthers
+              secondOthers) ≤
+        |secondOthers - firstOthers| *
+          quadraticOthersSensitivityBound params theta othersCap :=
+    mul_le_mul_of_nonneg_left maximumBound (abs_nonneg _)
+  exact le_trans detailed (div_le_div_of_nonneg_right numeratorBound
+    (sub_pos.mpr slopeMarginPositive).le)
 
 /-- Quantitative approach-to-threshold bound. The positive root is at most the
 score-at-zero surplus divided by the strictly positive initial-slope margin. -/
@@ -1044,6 +1698,39 @@ theorem nonlinearFirstOrderScore_at_quadraticParticipationThreshold_eq_zero
   unfold quadraticParticipationThreshold
   field_simp
   ring
+
+theorem nonlinearFirstOrderScore_at_zero_eq_zero_iff_theta_eq_threshold
+    (params : Params) (theta othersEffort : ℝ) (aPositive : 0 < params.a)
+    (bNonnegative : 0 ≤ params.b) (othersPositive : 0 < othersEffort)
+    (betaTwo : params.beta = 2) :
+    nonlinearFirstOrderScore params theta 0 othersEffort = 0 ↔
+      theta = quadraticParticipationThreshold params othersEffort := by
+  constructor
+  · intro scoreZero
+    have thresholdScoreZero :=
+      nonlinearFirstOrderScore_at_quadraticParticipationThreshold_eq_zero params
+        othersEffort aPositive bNonnegative othersPositive betaTwo
+    have difference := nonlinearFirstOrderScore_theta_sub params
+      (quadraticParticipationThreshold params othersEffort) theta 0 othersEffort
+    rw [scoreZero, thresholdScoreZero] at difference
+    have totalPositive : 0 < 0 + othersEffort := by simpa using othersPositive
+    have marginalPositive : 0 < marginalProduction params othersEffort := by
+      unfold marginalProduction
+      rw [betaTwo]
+      rw [show (2 : ℝ) - 1 = 1 by norm_num, Real.rpow_one]
+      have cooperativeNonnegative : 0 ≤ 2 * params.b * othersEffort := by positivity
+      nlinarith
+    have outputPositive : 0 < production params othersEffort :=
+      production_positive_of_a_pos params othersEffort aPositive bNonnegative
+        othersPositive
+    have coefficientPositive :
+        0 < (1 - 0) * marginalProduction params (0 + othersEffort) +
+          production params (0 + othersEffort) := by
+      simpa using add_pos marginalPositive outputPositive
+    nlinarith
+  · rintro rfl
+    exact nonlinearFirstOrderScore_at_quadraticParticipationThreshold_eq_zero
+      params othersEffort aPositive bNonnegative othersPositive betaTwo
 
 theorem continuous_nonlinearFirstOrderScore_beta_two (params : Params)
     (theta othersEffort : ℝ) (betaTwo : params.beta = 2) :
