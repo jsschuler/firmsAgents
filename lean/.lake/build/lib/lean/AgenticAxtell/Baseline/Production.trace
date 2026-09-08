@@ -1,5 +1,34 @@
-{"log":
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["f8689bc909a0a24e.olean"],
+  "i": "6202fe2f1f6596b4.ilean",
+  "c": "581da94808004f70.c"},
+ "log":
  [{"message":
-   ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell/Baseline/Production.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell/Baseline/Production.olean -i ././.lake/build/lib/lean/AgenticAxtell/Baseline/Production.ilean -c ././.lake/build/ir/AgenticAxtell/Baseline/Production.c --json",
+   ".> LEAN_PATH=/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.29.0/bin/lean /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/Production.lean -o /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/Production.olean -i /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/Production.ilean -c /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/Production.c --setup /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/Production.setup.json --json",
    "level": "trace"}],
- "depHash": "13487178910678354429"}
+ "inputs":
+ [["AgenticAxtell.Baseline.Production:deps",
+   [["deps",
+     [["AgenticAxtell/AgenticAxtell:extraDep",
+       [["@AgenticAxtell:extraDep", "00000000000006bb"]]],
+      ["imports",
+       [["AgenticAxtell.Baseline.Types transitive imports (legacy)",
+         "08bd5ec9feb5c5d7"],
+        ["AgenticAxtell.Baseline.Types:importAllArts", "e70c5313bb002e57"]]]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.29.0, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740",
+   "60bb08ef22408c8a"],
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/Production.lean",
+   "3423658a5e896141"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: AgenticAxtell.Baseline.Production", "49f9f1c83d8c8af0"],
+  ["Package.id?: (some AgenticAxtell)", "62f945e5bb481502"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "671bb68a56a8c886"}

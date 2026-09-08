@@ -5,3 +5,6 @@ import AgenticAxtell.Baseline.LinearStability
 import AgenticAxtell.Baseline.NonlinearProduction
 import AgenticAxtell.Baseline.NonlinearBestResponse
 import AgenticAxtell.Baseline.NonlinearFixedGroup
+import AgenticAxtell.Approximation.EffortGrid
+import AgenticAxtell.Approximation.FiniteState
+import AgenticAxtell.Approximation.FiniteTransition

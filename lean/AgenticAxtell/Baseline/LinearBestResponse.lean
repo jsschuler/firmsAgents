@@ -90,7 +90,7 @@ theorem normalized_linear_cobbDouglas_lt_one_of_ne_candidate
     intro factorsEqual
     have effortFormula : effort = theta - (1 - theta) * othersEffort := by
       dsimp [firstFactor, secondFactor] at factorsEqual
-      field_simp at factorsEqual
+      field_simp [thetaPositive.ne', (sub_pos.mpr thetaAtMostOne).ne'] at factorsEqual
       nlinarith
     apply effortNeCandidate
     rw [linearBestResponseCandidate,
@@ -110,7 +110,7 @@ theorem normalized_linear_cobbDouglas_lt_one_of_ne_candidate
     lt_of_le_of_ne weightedLe weightedNe
   have arithmeticEq : theta * firstFactor + (1 - theta) * secondFactor = 1 := by
     dsimp [firstFactor, secondFactor]
-    field_simp
+    field_simp [thetaPositive.ne', (sub_pos.mpr thetaAtMostOne).ne']
     ring
   simpa [firstFactor, secondFactor, arithmeticEq] using weightedLt
 

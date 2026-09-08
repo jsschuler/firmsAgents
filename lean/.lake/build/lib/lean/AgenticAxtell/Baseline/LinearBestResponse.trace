@@ -1,5 +1,39 @@
-{"log":
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["701f79ca9bf78e61.olean"],
+  "i": "bf4da7d4fc47c8e4.ilean",
+  "c": "9de3f137dab6e203.c"},
+ "log":
  [{"message":
-   ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell/Baseline/LinearBestResponse.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell/Baseline/LinearBestResponse.olean -i ././.lake/build/lib/lean/AgenticAxtell/Baseline/LinearBestResponse.ilean -c ././.lake/build/ir/AgenticAxtell/Baseline/LinearBestResponse.c --json",
+   ".> LEAN_PATH=/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.29.0/bin/lean /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/LinearBestResponse.lean -o /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/LinearBestResponse.olean -i /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/LinearBestResponse.ilean -c /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/LinearBestResponse.c --setup /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/LinearBestResponse.setup.json --json",
    "level": "trace"}],
- "depHash": "8207425057302198215"}
+ "inputs":
+ [["AgenticAxtell.Baseline.LinearBestResponse:deps",
+   [["deps",
+     [["AgenticAxtell/AgenticAxtell:extraDep",
+       [["@AgenticAxtell:extraDep", "00000000000006bb"]]],
+      ["imports",
+       [["AgenticAxtell.Baseline.FixedGroup transitive imports (legacy)",
+         "08949098f1416704"],
+        ["AgenticAxtell.Baseline.FixedGroup:importAllArts", "7497eb9b62d055e3"],
+        ["Mathlib.Analysis.MeanInequalities transitive imports (legacy)",
+         "6eeb76eb4106857c"],
+        ["Mathlib.Analysis.MeanInequalities:importAllArts",
+         "c8c78da51e89f613"]]]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.29.0, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740",
+   "60bb08ef22408c8a"],
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/LinearBestResponse.lean",
+   "5728d2a9ac90e3fc"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: AgenticAxtell.Baseline.LinearBestResponse",
+   "7af0e0596660f946"],
+  ["Package.id?: (some AgenticAxtell)", "62f945e5bb481502"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "90db275edb7a4d65"}

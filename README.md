@@ -25,8 +25,8 @@ dispersion, firm lifetimes, effort, income, utility, and aggregate productivity.
 
 Lean specifies the mathematical primitives over `ℝ`, local candidates, a sound
 deterministic choice-rule boundary, and exact agentic baseline recovery. The
-finite approximation is intentionally deferred and must remain a distinct
-model family.
+finite approximation is a distinct model family whose first shared primitive
+is a positive-resolution effort grid with `K+1` levels.
 
 ## Julia
 

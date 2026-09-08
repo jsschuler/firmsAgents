@@ -1,5 +1,38 @@
-{"log":
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["214a68e5ae43ccaf.olean"],
+  "i": "c71e1660bbc7e284.ilean",
+  "c": "257a3cc577758842.c"},
+ "log":
  [{"message":
-   ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell/Baseline/Candidates.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell/Baseline/Candidates.olean -i ././.lake/build/lib/lean/AgenticAxtell/Baseline/Candidates.ilean -c ././.lake/build/ir/AgenticAxtell/Baseline/Candidates.c --json",
-   "level": "trace"}],
- "depHash": "11099680055950386631"}
+   ".> LEAN_PATH=/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.29.0/bin/lean /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/Candidates.lean -o /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/Candidates.olean -i /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/Candidates.ilean -c /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/Candidates.c --setup /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/Candidates.setup.json --json",
+   "level": "trace"},
+  {"message":
+   "AgenticAxtell/Baseline/Candidates.lean:43:4: try 'simp' instead of 'simpa'\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`",
+   "level": "warning"}],
+ "inputs":
+ [["AgenticAxtell.Baseline.Candidates:deps",
+   [["deps",
+     [["AgenticAxtell/AgenticAxtell:extraDep",
+       [["@AgenticAxtell:extraDep", "00000000000006bb"]]],
+      ["imports",
+       [["AgenticAxtell.Baseline.BestResponse transitive imports (legacy)",
+         "a7ce90d7202d5559"],
+        ["AgenticAxtell.Baseline.BestResponse:importAllArts",
+         "f9c3c53814d7133b"]]]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.29.0, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740",
+   "60bb08ef22408c8a"],
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/Candidates.lean",
+   "96ffb7d0a789fb95"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: AgenticAxtell.Baseline.Candidates", "6e9417bc0d34470d"],
+  ["Package.id?: (some AgenticAxtell)", "62f945e5bb481502"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "699add9e2e42ac3b"}

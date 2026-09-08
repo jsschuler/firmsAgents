@@ -1,5 +1,35 @@
-{"log":
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["d97d749375315e29.olean"],
+  "i": "a5c97435c5ed4980.ilean",
+  "c": "20a323c6ee169ea6.c"},
+ "log":
  [{"message":
-   ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell/SemanticRecovery.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell/SemanticRecovery.olean -i ././.lake/build/lib/lean/AgenticAxtell/SemanticRecovery.ilean -c ././.lake/build/ir/AgenticAxtell/SemanticRecovery.c --json",
+   ".> LEAN_PATH=/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.29.0/bin/lean /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/SemanticRecovery.lean -o /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/SemanticRecovery.olean -i /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/SemanticRecovery.ilean -c /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/SemanticRecovery.c --setup /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/SemanticRecovery.setup.json --json",
    "level": "trace"}],
- "depHash": "1095849938960411634"}
+ "inputs":
+ [["AgenticAxtell.SemanticRecovery:deps",
+   [["deps",
+     [["AgenticAxtell/AgenticAxtell:extraDep",
+       [["@AgenticAxtell:extraDep", "00000000000006bb"]]],
+      ["imports",
+       [["AgenticAxtell.Agentic.Transition transitive imports (legacy)",
+         "8b01c988eefef5e2"],
+        ["AgenticAxtell.Agentic.Transition:importAllArts",
+         "95c662ef2fab1038"]]]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.29.0, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740",
+   "60bb08ef22408c8a"],
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/SemanticRecovery.lean",
+   "92bf4bb9466e5e70"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: AgenticAxtell.SemanticRecovery", "26560b1bc6cca49e"],
+  ["Package.id?: (some AgenticAxtell)", "62f945e5bb481502"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "c3e5cb9151c8c7ab"}

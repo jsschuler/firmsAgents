@@ -1,5 +1,35 @@
-{"log":
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["921f191b9695f14e.olean"],
+  "i": "575d2233ad84ee6c.ilean",
+  "c": "e52856b94c9b29b4.c"},
+ "log":
  [{"message":
-   ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././AgenticAxtell/Baseline/SemanticChoice.lean -R ./././. -o ././.lake/build/lib/lean/AgenticAxtell/Baseline/SemanticChoice.olean -i ././.lake/build/lib/lean/AgenticAxtell/Baseline/SemanticChoice.ilean -c ././.lake/build/ir/AgenticAxtell/Baseline/SemanticChoice.c --json",
+   ".> LEAN_PATH=/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Cli/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/batteries/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Qq/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/aesop/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/plausible/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean /Users/l25-n05917-res/.elan/toolchains/leanprover--lean4---v4.29.0/bin/lean /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/SemanticChoice.lean -o /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/SemanticChoice.olean -i /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/SemanticChoice.ilean -c /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/SemanticChoice.c --setup /Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/ir/AgenticAxtell/Baseline/SemanticChoice.setup.json --json",
    "level": "trace"}],
- "depHash": "9805906908890748657"}
+ "inputs":
+ [["AgenticAxtell.Baseline.SemanticChoice:deps",
+   [["deps",
+     [["AgenticAxtell/AgenticAxtell:extraDep",
+       [["@AgenticAxtell:extraDep", "00000000000006bb"]]],
+      ["imports",
+       [["AgenticAxtell.Baseline.Transition transitive imports (legacy)",
+         "464c638097fefe15"],
+        ["AgenticAxtell.Baseline.Transition:importAllArts",
+         "7552cee9a69bbabc"]]]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.29.0, commit 98dc76e3c0a9b856c9b98726b713fb04fab16740",
+   "60bb08ef22408c8a"],
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/AgenticAxtell/Baseline/SemanticChoice.lean",
+   "c88fb04858311614"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: AgenticAxtell.Baseline.SemanticChoice", "fd867837b7b8a795"],
+  ["Package.id?: (some AgenticAxtell)", "62f945e5bb481502"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "f21d75f5e8dd06f6"}

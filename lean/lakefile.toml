@@ -3,10 +3,14 @@ version = "0.1.0"
 defaultTargets = ["AgenticAxtell"]
 
 [[require]]
+name = "Gametheory"
+git = "https://github.com/LionSR/Brouwer.git"
+rev = "5a54bd0"
+
+[[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.19.0"
+rev = "v4.29.0"
 
 [[lean_lib]]
 name = "AgenticAxtell"
-

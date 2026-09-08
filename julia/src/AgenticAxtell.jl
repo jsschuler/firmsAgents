@@ -3,6 +3,7 @@ module AgenticAxtell
 using Random: AbstractRNG, Xoshiro, rand
 
 include("Config.jl")
+include("Approximation.jl")
 include("Params.jl")
 include("State.jl")
 include("Draws.jl")
@@ -19,6 +20,11 @@ include("Diagnostics.jl")
 include("Validation.jl")
 
 export ModelConfig, baseline_config, all_extensions_enabled,
+       AbstractEffortDomain, ContinuousEffort, EffortGrid, EffortLevel,
+       effort_levels, effort_value,
+       FiniteModelBounds, FiniteAgentId, FiniteFirmId, FiniteAgentState,
+       FiniteModelState, FiniteAction, FiniteDraw, agent_ids,
+       is_candidate_firm, finite_valid, finite_transition,
        ModelParams, axtell_base_case, AgentId, FirmId, AgentState, FirmState, ModelState,
        Draw, valid, sample_draw, firm_ids, firm_members, firm_effort,
        production, firm_output, income, utility, candidate_firms,

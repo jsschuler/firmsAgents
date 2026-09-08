@@ -74,18 +74,15 @@ theorem hasDerivAt_production (params : Params) (totalEffort : ℝ)
   have linearDerivative : HasDerivAt (fun effort : ℝ => params.a * effort)
       params.a totalEffort := by
     convert (hasDerivAt_const totalEffort params.a).mul
-      (hasDerivAt_id totalEffort) using 1
-    all_goals ring
+      (hasDerivAt_id totalEffort) using 1 <;> try ring
   have powerDerivative : HasDerivAt (fun effort : ℝ => effort ^ params.beta)
       (params.beta * totalEffort ^ (params.beta - 1)) totalEffort :=
     Real.hasDerivAt_rpow_const (Or.inl effortPositive.ne')
   have cooperativeDerivative : HasDerivAt
       (fun effort : ℝ => params.b * effort ^ params.beta)
       (params.b * (params.beta * totalEffort ^ (params.beta - 1))) totalEffort := by
-    convert (hasDerivAt_const totalEffort params.b).mul powerDerivative using 1
-    all_goals ring
+    convert (hasDerivAt_const totalEffort params.b).mul powerDerivative using 1 <;> try ring
   unfold production marginalProduction
-  convert linearDerivative.add cooperativeDerivative using 1
-  all_goals ring
+  convert linearDerivative.add cooperativeDerivative using 1 <;> try ring
 
 end AgenticAxtell.Baseline

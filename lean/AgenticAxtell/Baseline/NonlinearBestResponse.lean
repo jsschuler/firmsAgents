@@ -205,7 +205,6 @@ theorem marginalLogUtility_eq_score_div (params : Params)
   unfold marginalLogUtility nonlinearFirstOrderScore
   field_simp [incomeNonzero, leisureNonzero, outputNonzero,
     ne_of_gt firmSizeCastPositive]
-  ring
 
 theorem marginalLogUtility_pos_iff_score_pos (params : Params)
     (theta effort othersEffort : ℝ) (firmSize : Nat)
@@ -327,9 +326,10 @@ theorem beta_two_theta_scoreSensitivity_le_feasible_bound
       marginalProduction params (effort + othersEffort) ≤
         params.a + 2 * params.b * (1 + othersEffort) := by
     rw [marginalExpansion]
-    exact add_le_add_left
-      (mul_le_mul_of_nonneg_left totalAtMost
-        (mul_nonneg (by norm_num) bNonnegative)) params.a
+    have coefficientNonnegative : 0 ≤ 2 * params.b :=
+      mul_nonneg (by norm_num) bNonnegative
+    have scaled := mul_le_mul_of_nonneg_left totalAtMost coefficientNonnegative
+    linarith
   have outputAtMost :
       production params (effort + othersEffort) ≤
         params.a * (1 + othersEffort) +

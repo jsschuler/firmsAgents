@@ -14,6 +14,7 @@ by the source are documented in `docs/IMPLEMENTATION_CHOICES.md`.
 | firm ID | `FirmId` wrapping `Int` | `FirmId` wrapping `Nat` | positive/nonzero |
 | preference | `Float64` | `ℝ` | in `[0,1]` |
 | effort | `Float64` | `ℝ` | in `[0,1]` |
+| finite effort level | `EffortLevel{K}` | `EffortLevel grid` | index in `0:K`, decoded as `index/K` |
 | compute | `Float64` | deferred | extension state, behaviorally inert |
 
 ## Records
@@ -27,6 +28,12 @@ by the source are documented in `docs/IMPLEMENTATION_CHOICES.md`.
 - `Params`: population, production, neighborhood, reporting, initialization,
   optimizer, and comparison parameters.
 - `Config`: all nine feature flags required by `SPEC.md`.
+- `FiniteModelState`: distinct approximation carrier with bounded ID types,
+  optional bounded agent slots, grid-valued preferences and efforts, finite
+  neighbor/firm sets, and bounded optional next IDs. Its current finite
+  partition-validity predicate requires the active-firm set to be exactly the
+  set of firm IDs occupied by active agent slots; graph well-formedness is a
+  later, separate invariant.
 
 ## Transition composition
 

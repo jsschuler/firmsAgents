@@ -38,8 +38,9 @@ theorem candidateFirm_le_nextFirmId (params : Params) (state : State) (agent : A
   rcases valid with ⟨_, _, firmBounds, _, _, _, _, _, _, neighborsExist⟩
   have agentFirmBound := firmBounds agent agentMem
   simp [candidateFirms] at firmMem
-  rcases firmMem with rfl | neighborFirmMem | rfl
-  · exact Nat.le_of_lt agentFirmBound
+  rcases firmMem with currentFirm | startupFirm | neighborFirmMem
+  · simpa [currentFirm] using Nat.le_of_lt agentFirmBound
+  · simpa [startupFirm]
   · rcases neighborFirmMem with ⟨neighborId, neighborIdMem, found, foundEq, foundFirm⟩
     obtain ⟨_, neighborExists⟩ := neighborsExist agent agentMem neighborId neighborIdMem
     rcases List.mem_map.mp neighborExists with ⟨neighbor, neighborMem, neighborIdEq⟩
@@ -49,6 +50,5 @@ theorem candidateFirm_le_nextFirmId (params : Params) (state : State) (agent : A
       exact foundEq
     rw [← foundFirm]
     exact Nat.le_of_lt (firmBounds found foundMem)
-  · exact Nat.le_refl _
 
 end AgenticAxtell.Baseline

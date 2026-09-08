@@ -1,4 +1,6 @@
 import AgenticAxtell.Baseline.NonlinearBestResponse
+import Gametheory.Brouwer_product
+import Mathlib.Analysis.Convex.StdSimplex
 import AgenticAxtell.Baseline.FixedGroup
 
 namespace AgenticAxtell.Baseline
@@ -441,14 +443,19 @@ theorem continuousAt_nonlinearNonnegativeOthersResponse_zero
     exact (nonlinearFirstOrderScore_beta_two_at_zero params theta candidate.1
       betaTwo).symm
   have scoreAtZeroPositive : 0 < score zeroPoint := by
-    dsimp [score, zeroPoint]
-    rw [nonlinearFirstOrderScore_beta_two_at_zero params theta 0 betaTwo]
-    nlinarith
+    have base : 0 < nonlinearFirstOrderScore params theta 0 0 := by
+      rw [nonlinearFirstOrderScore_beta_two_at_zero params theta 0 betaTwo]
+      nlinarith
+    exact base
   have marginAtZeroPositive : 0 < margin zeroPoint := by
-    dsimp [margin, zeroPoint]
-    have weightedLinearAtMost : (1 - theta) * params.a ≤ params.a := by
-      nlinarith [mul_nonneg thetaPositive.le aPositive.le]
-    nlinarith
+    have base : 0 < params.a - 2 * params.b * theta := by
+      have weightedLinearAtMost : (1 - theta) * params.a ≤ params.a := by
+        nlinarith [mul_nonneg thetaPositive.le aPositive.le]
+      nlinarith
+    change 0 < params.a - 2 * params.b * (theta - zeroPoint.val)
+    have zeroPointValue : zeroPoint.val = 0 := by rfl
+    rw [zeroPointValue]
+    simpa using base
   have sensitivityPositive : 0 < sensitivity := by
     exact quadraticOthersSensitivityBound_pos params theta 1 aPositive
       paramsValid.2.2.1 thetaBelowOne (by norm_num)
@@ -687,7 +694,6 @@ theorem continuousAt_nonlinearOthersResponse_positiveBranch
         mul_lt_mul_of_pos_right scaleDistance sensitivityPositive
       _ = epsilon * pairedMargin othersEffort / 2 := by
         field_simp [sensitivityPositive.ne']
-        ring
   have scaledMargin :
       epsilon * pairedMargin othersEffort / 2 <
         epsilon * pairedMargin candidateOthers := by
@@ -1289,7 +1295,6 @@ theorem continuousAt_nonlinearFeasibleThetaResponse_positiveBranch
         mul_lt_mul_of_pos_right scaleDistance sensitivityPositive
       _ = epsilon * pairedMargin theta / 2 := by
         field_simp [sensitivityPositive.ne']
-        ring
   have targetProductSmall :
       |candidate.1 - theta.1| * sensitivity <
         epsilon * pairedMargin candidate := by
@@ -1501,6 +1506,27 @@ def FeasibleCubeFixedPointPrinciple (groupSize : Nat) : Prop :=
       FeasibleFixedGroupProfile groupSize,
     Continuous response → ∃ profile, response profile = profile
 
+/-- Brouwer's theorem on products of simplices supplies the fixed-point
+principle for every nonempty finite feasible-profile cube. -/
+theorem feasibleCubeFixedPointPrinciple_of_positive {groupSize : Nat}
+    (groupSizePositive : 0 < groupSize) :
+    FeasibleCubeFixedPointPrinciple groupSize := by
+  letI : Inhabited (Fin groupSize) := ⟨⟨0, groupSizePositive⟩⟩
+  intro response responseContinuous
+  let equivalence : FeasibleFixedGroupProfile groupSize ≃ₜ
+      ProductSimplices (fun _ : Fin groupSize => (2 : ℕ+)) :=
+    Homeomorph.piCongrRight fun _ => (stdSimplexHomeomorphUnitInterval).symm
+  let conjugate := equivalence ∘ response ∘ equivalence.symm
+  have conjugateContinuous : Continuous conjugate :=
+    equivalence.continuous.comp
+      (responseContinuous.comp equivalence.symm.continuous)
+  obtain ⟨point, pointFixed⟩ :=
+    Brouwer_Product (card := fun _ : Fin groupSize => (2 : ℕ+))
+      conjugate conjugateContinuous
+  refine ⟨equivalence.symm point, ?_⟩
+  change equivalence.symm (conjugate point) = _
+  simpa [conjugate] using congrArg equivalence.symm pointFixed
+
 /-- Once the finite-cube fixed-point principle is available, continuity of the
 nonlinear response produces a fixed-group Nash equilibrium. -/
 theorem exists_nonlinearFixedGroupNash_of_cubeFixedPointPrinciple
@@ -1541,6 +1567,24 @@ theorem exists_nonlinearFixedGroupNash_of_cubeFixedPointPrinciple
   rw [coordinateFixed] at selectedBest
   simpa [profile, fixedGroupOtherEffort, feasibleFixedGroupOtherEffort] using
     selectedBest
+
+/-- Under the decreasing-score parameter regime, every nonempty finite group
+has a nonlinear fixed-group Nash equilibrium. -/
+theorem exists_nonlinearFixedGroupNash
+    (params : Params) {groupSize : Nat} (theta : Fin groupSize → ℝ)
+    (paramsValid : ValidParams params)
+    (thetaPositive : ∀ agent, 0 < theta agent)
+    (thetaBelowOne : ∀ agent, theta agent < 1)
+    (aPositive : 0 < params.a) (groupSizePositive : 0 < groupSize)
+    (betaTwo : params.beta = 2)
+    (uniformBound : ∀ agent,
+      2 * params.b * theta agent < (1 - theta agent) * params.a) :
+    ∃ profile : FixedGroupProfile groupSize,
+      IsFixedGroupNash params theta profile :=
+  exists_nonlinearFixedGroupNash_of_cubeFixedPointPrinciple params theta
+    paramsValid thetaPositive thetaBelowOne aPositive groupSizePositive betaTwo
+    uniformBound
+    (feasibleCubeFixedPointPrinciple_of_positive groupSizePositive)
 
 /-- Simultaneous fixed-membership response obtained by dispatching the scalar
 nonlinear selector over agents and their coworker-effort environments. -/

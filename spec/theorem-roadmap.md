@@ -387,16 +387,52 @@ Implemented in the continuous semantic Lean scaffold:
     principle, the continuous nonlinear cube response has a fixed point; after
     forgetting subtype bounds, coordinatewise selector optimality proves that
     profile is a fixed-group Nash equilibrium.
+83. The finite-cube principle is discharged using the published
+    Scarf--Brouwer Lean development. The project is upgraded to Lean/Mathlib
+    4.29 and pins `LionSR/Brouwer`; the feasible effort cube is conjugated by a
+    coordinatewise homeomorphism to a finite product of two-coordinate
+    simplices. `Brouwer_Product` therefore supplies a fixed point, yielding the
+    unconditional theorem `exists_nonlinearFixedGroupNash` for every nonempty
+    finite group under the established beta-two decreasing-score assumptions.
+84. Milestone 4 begins with a cross-language finite effort grid. Lean represents
+    a positive resolution `K` and its `K+1` levels dependently, proves every
+    decoded real effort lies in `[0,1]`, and identifies the exact zero and one
+    endpoints. Julia mirrors the semantics with parametric
+    `EffortGrid{K}`/`EffortLevel{K}` types and multiple-dispatch decoding, with
+    tests covering enumeration, endpoint values, and invalid construction.
+85. The finite approximation gains bounded agent and firm identifiers and a
+    bounded global-state carrier. Active agents have grid-valued preferences
+    and efforts, bounded firm IDs, and finite neighbor sets; optional agent
+    slots and next-ID fields leave room for later termination and spawning.
+    Lean derives `Fintype` instances and proves both the entire carrier and
+    every validity-restricted state subset finite. Julia mirrors these types
+    parametrically and tests bounds and construction.
+86. Finite candidate actions, bounded draws, and a deterministic transition
+    boundary are added in both languages. Choice policy remains an explicit
+    argument: missing activations and rejected choices are identity steps,
+    while accepted actions atomically replace effort and firm membership,
+    recompute the active-firm set, and advance or exhaust the bounded startup
+    identifier. Lean proves the two identity branches; Julia tests startup,
+    membership, effort, rejection, and draw bounds.
+87. Finite partition validity is now explicit in both languages: the recorded
+    active-firm set must equal exactly the firms occupied by active agent
+    slots. Lean proves that every active agent's firm is recorded and that the
+    deterministic finite transition preserves this invariant for sound choice
+    rules (in fact, structurally for any rule), because accepted actions
+    recompute the set and identity branches retain the input state. Julia
+    mirrors the predicate and tests valid, transitioned, and malformed states.
 
 The heterogeneous interior linear-response spectral argument is now complete.
-The preference-parameter continuity program is complete. Work now targets
-unconditional existence of a nonlinear fixed-group fixed point. The
-model-specific reduction from a continuous feasible-cube response to Nash
-existence is complete. The installed Mathlib snapshot does not expose a
-Brouwer or Schauder theorem for finite cubes, so the remaining gap is to import
-or formalize that topological result. An alternative is to impose a stronger
-quantitative restriction and prove the response is a contraction, allowing
-Mathlib's existing Banach fixed-point theorem to close the argument. Any
+The preference-parameter continuity program is complete. Nonlinear
+fixed-group Nash existence is now unconditional within the established
+beta-two decreasing-score regime: continuity, feasibility, finite-cube
+Brouwer, and the fixed-point-to-Nash translation are all formalized. Work now
+targets the explicitly separate finite approximation. Its bounded global state
+space is now proved finite and its deterministic draw-indexed transition is
+defined, with finite partition validity preserved. Next construct the
+small-population transition matrix in Julia and the corresponding stochastic
+kernel in Lean. Full graph well-formedness (no self-neighbors and only active
+neighbors) remains a separate strengthening of finite validity. Any
 unconditional continuity or decreasing-response claim outside the currently
 covered regime requires extra parameter restrictions or a separate argument,
 because increasing returns can make the quadratic score initially rise.
