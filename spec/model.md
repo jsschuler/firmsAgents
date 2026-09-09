@@ -32,8 +32,9 @@ by the source are documented in `docs/IMPLEMENTATION_CHOICES.md`.
   optional bounded agent slots, grid-valued preferences and efforts, finite
   neighbor/firm sets, and bounded optional next IDs. Its current finite
   partition-validity predicate requires the active-firm set to be exactly the
-  set of firm IDs occupied by active agent slots; graph well-formedness is a
-  later, separate invariant.
+  set of firm IDs occupied by active agent slots. Its separate graph-validity
+  predicate forbids self-neighbors and requires every neighbor slot to be
+  occupied; finite transitions preserve both invariants.
 
 ## Transition composition
 

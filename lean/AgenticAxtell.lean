@@ -8,3 +8,8 @@ import AgenticAxtell.Baseline.NonlinearFixedGroup
 import AgenticAxtell.Approximation.EffortGrid
 import AgenticAxtell.Approximation.FiniteState
 import AgenticAxtell.Approximation.FiniteTransition
+import AgenticAxtell.Approximation.FiniteKernel
+import AgenticAxtell.Approximation.FiniteDynamics
+import AgenticAxtell.Approximation.FiniteObservables
+import AgenticAxtell.Approximation.Stationary
+import AgenticAxtell.Approximation.ChainStructure

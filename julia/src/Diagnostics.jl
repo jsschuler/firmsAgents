@@ -2,6 +2,20 @@ firm_sizes(state::ModelState) = Dict(
     firm.id => length(firm_members(state, firm.id)) for firm in state.firms
 )
 
+"""Finite-sample normalized Gini coefficient. The `n/(n-1)` correction makes
+the maximum attainable inequality equal to one for any sample size `n > 1`."""
+function normalized_gini(values::AbstractVector{<:Real})
+    isempty(values) && throw(ArgumentError("Gini sample must be nonempty"))
+    all(>=(0), values) || throw(ArgumentError("Gini values must be nonnegative"))
+    total = sum(values)
+    total > 0 || throw(ArgumentError("Gini total must be positive"))
+    length(values) == 1 && return 0.0
+    ordered = sort(values)
+    n = length(ordered)
+    weighted = sum((2index - n - 1) * value for (index, value) in enumerate(ordered))
+    weighted / ((n - 1) * total)
+end
+
 firm_outputs(state::ModelState, params::ModelParams) = Dict(
     firm.id => firm_output(state, firm.id, params) for firm in state.firms
 )

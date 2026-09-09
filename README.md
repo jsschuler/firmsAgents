@@ -25,8 +25,10 @@ dispersion, firm lifetimes, effort, income, utility, and aggregate productivity.
 
 Lean specifies the mathematical primitives over `ℝ`, local candidates, a sound
 deterministic choice-rule boundary, and exact agentic baseline recovery. The
-finite approximation is a distinct model family whose first shared primitive
-is a positive-resolution effort grid with `K+1` levels.
+finite approximation is a distinct model family with bounded states, exact
+stochastic kernels, arbitrary-horizon validity preservation, and bounded
+firm-size tail observables. Julia mirrors it with exact rational transition
+matrices, stationary-distribution checks, and firm-size CCDF diagnostics.
 
 ## Julia
 
@@ -47,6 +49,54 @@ For independent seed-level consistency diagnostics, use multiple Julia threads:
 ```sh
 JULIA_NUM_THREADS=4 julia --project=julia \
   julia/scripts/validate_many_seeds.jl 40 10 101:120
+```
+
+Run the population-scaling diagnostic with comma-separated population sizes,
+reporting periods, burn-in, and seeds:
+
+```sh
+JULIA_NUM_THREADS=4 julia --project=julia \
+  julia/scripts/study_population_scaling.jl 100,250,500,1000 40 10 101,102,103,104,105
+```
+
+To distinguish population scaling from slow convergence in simulated time,
+run one long trajectory per seed and inspect nested trailing-half windows:
+
+```sh
+JULIA_NUM_THREADS=4 julia --project=julia \
+  julia/scripts/study_horizon_scaling.jl 1000 20,40,80 101,102,103,104,105
+```
+
+Estimate Hill tail indices, cutoff-truncated second moments, and seed-bootstrap
+uncertainty with:
+
+```sh
+JULIA_NUM_THREADS=4 julia --project=julia \
+  julia/scripts/study_tail_moments.jl 1000 40 10 101,102,103,104,105,106,107,108,109,110
+```
+
+Estimate cross-population scaling of extremes relative to the median and of
+second moments under cutoffs that grow with population:
+
+```sh
+JULIA_NUM_THREADS=4 julia --project=julia \
+  julia/scripts/study_extreme_scaling.jl 100,250,500,1000 40 10 101,102,103,104,105
+```
+
+Measure how many independent replications are needed for the period-balanced
+mean firm size to attain specified relative confidence-interval widths:
+
+```sh
+JULIA_NUM_THREADS=6 julia --project=julia \
+  julia/scripts/study_mean_stabilization.jl 100,250,500,1000 40 10 30 1001
+```
+
+Track instantaneous and trailing-window distribution statistics over a very
+long small-population trajectory with:
+
+```sh
+julia --project=julia \
+  julia/scripts/study_long_time_drift.jl 100 5000 20260909 100
 ```
 
 ## Lean

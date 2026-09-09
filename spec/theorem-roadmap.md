@@ -421,6 +421,186 @@ Implemented in the continuous semantic Lean scaffold:
     rules (in fact, structurally for any rule), because accepted actions
     recompute the set and identity branches retain the input state. Julia
     mirrors the predicate and tests valid, transitioned, and malformed states.
+88. One-step finite stochastic dynamics are now constructed in both languages.
+    Julia enumerates bounded draws and pushes an exact supplied draw
+    distribution through the deterministic transition to form a rational
+    row-stochastic matrix, rejecting duplicate or non-closed state lists and
+    non-probability weights. Lean pushes the uniform finite-draw `PMF` through
+    the same transition; normalization is carried by the `PMF` type, and a
+    support theorem proves that sound rules cannot leave partition-valid
+    states. A two-state Julia example checks the matrix and exact row sums.
+89. Finite graph validity now requires every neighbor to occupy an active agent
+    slot and forbids self-neighbors. Lean proves agent replacement preserves
+    the occupied-slot set when an active slot is replaced, then uses unchanged
+    neighbor lists to prove both deterministic transitions and every state in
+    the stochastic kernel's support remain graph-valid. Julia mirrors the
+    predicate and tests preservation, self-neighbor rejection, and rejection
+    of neighbors whose slots are empty.
+90. The one-step cross-language probability contract is explicit and tested.
+    A shared two-state fixture records integer transition counts with a common
+    denominator; Julia reads it and checks the exact rational matrix rows
+    `[1/2, 1/2]` and `[0, 1]`. Lean proves the general kernel-entry formula:
+    the probability of a successor is exactly the sum of one uniform weight
+    for each finite draw whose deterministic transition produces it. This
+    identifies Julia's count aggregation with the Lean `PMF` construction
+    without relying on floating-point comparison.
+91. Multi-step finite dynamics are now defined. Julia propagates exact row
+    distributions through a transition matrix for any nonnegative horizon and
+    checks stationarity by exact equality; the shared two-state example gives
+    `[1/4, 3/4]` after two steps and verifies its absorbing distribution.
+    Lean iterates the one-step kernel with `PMF.bind` and proves by induction
+    that every state in every finite-horizon support preserves both partition
+    validity and graph validity (the former under the established soundness
+    interface).
+92. The finite approximation is connected to firm-size tail diagnostics.
+    Julia maps any exact state distribution (including a stationary one) to
+    expected firm counts by size and a firm-weighted complementary cumulative
+    distribution, with exact rational arithmetic. Lean defines bounded firm
+    size and the corresponding upper-tail event, proves every size is at most
+    the number of agent slots, and proves tail events above that bound are
+    impossible. This deliberately separates finite CCDF evidence from an
+    asymptotic power-law claim; the existing multi-seed baseline experiments
+    remain the evidence for heavy tails in the full simulation.
+93. Stationarity and the fixed-population variance limitation are formalized.
+    A stationary finite distribution is defined as a `PMF` fixed by one-step
+    kernel evolution, and Lean proves such a distribution remains fixed at
+    every finite horizon. For every state distribution—not merely stationary
+    ones—and every bounded firm ID, Lean proves the firm's size variance is at
+    most `(agentSlots / 2)^2`. Thus infinite variance is formally impossible
+    at fixed population size; any variance-divergence theorem must concern a
+    family of models whose population bound tends to infinity.
+94. Stationary-vector existence is proved for every nonempty finite
+    row-stochastic real matrix. Matrix action is packaged as a continuous
+    self-map of the standard probability simplex; Mathlib's stochastic-matrix
+    lemmas prove the map preserves nonnegativity and total mass, and the
+    project's Brouwer dependency supplies a fixed point. The remaining bridge
+    to the model-specific theorem is to express `finiteKernel` as such a real
+    matrix and convert the fixed simplex vector back to a `PMF`.
+95. The stationary-existence bridge is closed for the actual finite model.
+    Lean converts every `finiteKernel` row to real probabilities and proves the
+    resulting matrix row-stochastic from `PMF.tsum_coe`. The Brouwer stationary
+    vector theorem is transported from `Fin n` to an arbitrary nonempty finite
+    state type, converted back through `ENNReal.ofReal` and `PMF.ofFintype`, and
+    proved invariant using the exact `PMF.bind` formula. Consequently every
+    bounded finite-model kernel with a nonempty draw space has at least one
+    `IsStationaryFiniteDistribution` witness.
+96. Finite-chain structure is now formalized directly on `finiteKernel` support.
+    Positive-probability edges generate reflexive-transitive reachability;
+    mutual reachability defines communication, and closed communicating
+    classes combine nonemptiness, pairwise communication, and transition
+    closure. Absorbing states are point-mass kernel rows, irreducibility means
+    universal reachability, and aperiodicity is stated by eventual availability
+    of every sufficiently large return time. Lean proves the basic reachability
+    and communication laws and that every absorbing state forms a singleton
+    closed communicating class.
+97. Julia now computes the corresponding chain structure from exact transition
+    matrices: positive adjacency, reflexive-transitive reachability,
+    communicating classes, closed classes, absorbing states, irreducibility,
+    graph periods, and aperiodicity. The shared two-state fixture has two
+    communicating classes, one closed absorbing class, is not irreducible, and
+    is aperiodic; a separate deterministic two-cycle is correctly classified
+    as irreducible with period two. These routines provide the executable
+    classification layer needed before asserting uniqueness or convergence for
+    larger finite Axtell kernels.
+98. A first economically meaningful finite kernel is constructed and exactly
+    classified in Julia. A grid-dispatched `FiniteBestResponseRule` maximizes
+    the baseline utility over grid efforts and the current, neighbor, and
+    startup firms; reachable-state discovery constructs the smallest
+    transition-closed enumeration from the initial state. For two neighboring
+    agents on a three-level effort grid, the reachable kernel has three states
+    and matrix `[[0,1/2,1/2],[0,1,0],[0,0,1]]`: the separated initial state is
+    transient, the two possible consolidated firms are absorbing closed
+    classes, and the initialized limiting distribution is their equal mixture.
+    Hence this example is neither irreducible nor uniquely stationary, while
+    both terminal outcomes have one firm of size two.
+99. The economic enumeration is extended to three mutually neighboring agents.
+    Exact reachable-state closure contains 85 states, 55 communicating classes,
+    and 12 singleton absorbing closed classes. Solving the rational Dirichlet
+    system gives exact absorption probabilities from the initialized state;
+    they sum to one and are regression-tested. Every absorbing class has the
+    same unlabeled firm-size composition `[3]`, so label and effort histories
+    create stationary nonuniqueness here without stationary firm-size
+    variance. This rules out three homogeneous fully connected agents as the
+    desired minimal example of competing terminal size compositions.
+100. A four-agent heterogeneous directed-network example supplies the first
+    exact mixture over distinct terminal firm-size compositions at the
+    baseline increasing-returns exponent `b = 1`. On the three-level effort
+    grid, with preference-grid indices `[2,1,2,2]` and neighbor lists
+    `[[2],[1],[4],[1,3]]`, the reachable kernel has 120 states, 108
+    communicating classes, and nine singleton absorbing closed classes. Six
+    terminal states have composition `[2,2]` and three have `[4]`. An
+    arbitrary-precision rational Dirichlet solve gives initialized absorption
+    masses `192865369/301644000` and `108778631/301644000`, respectively. Thus
+    the nonlinear finite economic rule generates genuine stationary firm-size
+    uncertainty, not merely label-level stationary nonuniqueness. This remains
+    a small heterogeneous-network example, not a heavy-tail theorem.
+101. Population scaling is now measured directly in the continuous baseline.
+    A threaded reproducible study compares populations 100, 250, 500, and
+    1,000 over five seeds, 40 periods, and a 10-period burn-in. Median
+    firm-weighted size variance rises from 9.47 to 13.45, but the median second
+    moment nearly levels from 16.86 to 20.00 and median maximum-firm share
+    falls from 0.120 to 0.036; median rank-size slopes remain near -1.6. This
+    supports population-robust right-skew at the tested horizons, but it is not
+    evidence for unbounded variance. The script and seed-level CSV make a
+    larger, longer convergence study the next empirical step.
+102. Horizon scaling now separates slow time convergence from population size.
+    Five `N = 1000` trajectories are simulated once through 80 periods, with
+    nested measurements at periods 20, 40, and 80 over each horizon's trailing
+    half. Median second moments are 22.10, 18.77, and 23.03, while median
+    maximum-firm shares are 0.034, 0.036, and 0.048. The lack of monotone moment
+    growth weakens the claim that the 40-period scaling experiment merely
+    missed rapid divergence. It does not rule out slower asymptotic divergence;
+    distinguishing that requires uncertainty-aware tail-index or truncated-
+    moment analysis rather than extrapolating these three medians.
+103. Tail-index and truncated-moment diagnostics now use independent seeds as
+    the uncertainty unit. For ten `N = 1000` baseline runs, median Hill indices
+    at upper-tail fractions 5%, 10%, and 20% are 2.003, 1.766, and 1.413; the
+    corresponding seed-bootstrap interval at 5% is `[1.782, 2.327]` and crosses
+    the infinite-variance boundary. This pronounced threshold sensitivity does
+    not identify a stable Pareto exponent. Median truncated second moments at
+    cutoffs 5, 10, 20, 40, and 80 are 6.48, 10.61, 15.15, 19.34, and 21.37,
+    with shrinking increments. Current simulation evidence establishes a
+    persistent heavy/right tail but neither exact Pareto form nor unbounded
+    variance.
+104. A larger and longer baseline experiment tests the scale objection
+    directly. Three independent `N = 2000` trajectories run for 200 periods,
+    or 400,000 activations each. Across nested horizons 50, 100, and 200,
+    median second moments are 21.28, 22.59, and 23.14; median terminal maximum
+    shares fall from 0.025 to 0.0175, and median rank-size slopes stay near
+    -1.59. Period-200 terminal maxima are only 38, 33, and 35. This is stronger
+    evidence for a stable finite-scale heavy tail than the shorter experiments,
+    though it remains simulation evidence rather than an asymptotic proof.
+105. Cross-population tail scaling now uses quantities that are not neutralized
+    by division by the finite population bound. Across matched seeds and
+    populations 100 through 1,000, the median log-log exponent of terminal
+    maximum over median firm size is 0.784, though its five-seed bootstrap
+    interval includes zero. Growing-cutoff second moments provide stronger
+    evidence: cutoffs `sqrt(N)` and `N/10` yield median exponents 0.217 and
+    0.291 with seed-bootstrap intervals `[0.121,0.385]` and `[0.129,0.505]`.
+    Thus scale-dependent moment growth is present over the measured decade.
+    Whether it persists as `N` tends to infinity remains unresolved.
+106. Finite-sample normalized Gini coefficients now complement extreme and
+    moment scaling. The implementation applies the `m/(m-1)` correction so
+    maximal inequality among `m` active firms equals one, computes Gini per
+    retained period, and averages periods equally within seeds. Median values
+    for populations 100, 250, 500, and 1,000 are 0.464, 0.474, 0.472, and
+    0.469. Inequality in the distribution's body is therefore scale-stable
+    over the measured decade even as growing-cutoff moments increase.
+107. Replication requirements for mean firm size are now estimated from 30
+    independent seeds at each of four population scales. The period-balanced
+    mean estimates at 30 replications lie between 2.622 and 2.665. Persistent
+    approximate-95% relative half-width below 5% is reached at 21, 7, 5, and 4
+    replications for populations 100, 250, 500, and 1,000. The 2% target is
+    reached within 30 runs only at populations 500 and 1,000, requiring 27 and
+    20 replications; no population reaches 1%. Mean behavior self-averages with
+    population considerably faster than extreme-tail behavior.
+108. Long-time drift is checked over 5,000 periods for one `N = 100` baseline
+    trajectory, totaling 500,000 activations. Trailing 100-period mean firm
+    size stays between 2.85 and 2.99 from period 100 onward, normalized Gini
+    between 0.485 and 0.514, and second moment between 24.75 and 31.82 at the
+    reported checkpoints. At period 5,000 these values are 2.881, 0.501, and
+    26.43. No sustained temporal drift is visible at this scale, although a
+    single path cannot establish stationarity or rare-event frequencies.
 
 The heterogeneous interior linear-response spectral argument is now complete.
 The preference-parameter continuity program is complete. Nonlinear
@@ -428,11 +608,11 @@ fixed-group Nash existence is now unconditional within the established
 beta-two decreasing-score regime: continuity, feasibility, finite-cube
 Brouwer, and the fixed-point-to-Nash translation are all formalized. Work now
 targets the explicitly separate finite approximation. Its bounded global state
-space is now proved finite and its deterministic draw-indexed transition is
-defined, with finite partition validity preserved. Next construct the
-small-population transition matrix in Julia and the corresponding stochastic
-kernel in Lean. Full graph well-formedness (no self-neighbors and only active
-neighbors) remains a separate strengthening of finite validity. Any
+space is now proved finite, its deterministic draw-indexed transition and
+one-step stochastic kernel are defined, graph and partition validity are
+preserved at arbitrary finite horizons, and exact probability aggregation is
+aligned across languages. Finite stationary distributions feed exact
+firm-size tail observables. The finite-approximation milestone is complete. Any
 unconditional continuity or decreasing-response claim outside the currently
 covered regime requires extra parameter restrictions or a separate argument,
 because increasing returns can make the quadratic score initially rise.

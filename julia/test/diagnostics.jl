@@ -66,3 +66,13 @@ end
     @test all(>=(0), values(lifetimes.completed))
     @test all(>=(0), values(lifetimes.censored))
 end
+
+@testset "normalized Gini" begin
+    @test normalized_gini([1]) == 0.0
+    @test normalized_gini([1, 1, 1]) == 0.0
+    @test normalized_gini([0, 0, 3]) == 1.0
+    @test normalized_gini([1, 2, 3]) ≈ 1/3
+    @test_throws ArgumentError normalized_gini(Int[])
+    @test_throws ArgumentError normalized_gini([0, 0])
+    @test_throws ArgumentError normalized_gini([-1, 2])
+end

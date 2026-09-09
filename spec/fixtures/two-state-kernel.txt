@@ -1,0 +1,4 @@
+# Exact shared fixture: each row lists transition counts, then divide by denominator.
+denominator=2
+initial=1,1
+moved=0,2

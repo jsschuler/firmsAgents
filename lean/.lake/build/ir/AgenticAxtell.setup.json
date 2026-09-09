@@ -40523,12 +40523,22 @@
   ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/Candidates.olean"],
   "AgenticAxtell.Baseline.BestResponse":
   ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Baseline/BestResponse.olean"],
+  "AgenticAxtell.Approximation.Stationary":
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/Stationary.olean"],
   "AgenticAxtell.Approximation.FiniteTransition":
   ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/FiniteTransition.olean"],
   "AgenticAxtell.Approximation.FiniteState":
   ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/FiniteState.olean"],
+  "AgenticAxtell.Approximation.FiniteObservables":
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/FiniteObservables.olean"],
+  "AgenticAxtell.Approximation.FiniteKernel":
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/FiniteKernel.olean"],
+  "AgenticAxtell.Approximation.FiniteDynamics":
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/FiniteDynamics.olean"],
   "AgenticAxtell.Approximation.EffortGrid":
   ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/EffortGrid.olean"],
+  "AgenticAxtell.Approximation.ChainStructure":
+  ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Approximation/ChainStructure.olean"],
   "AgenticAxtell.Agentic.Transition":
   ["/Users/l25-n05917-res/ResearchCode/firmsAgents/lean/.lake/build/lib/lean/AgenticAxtell/Agentic/Transition.olean"],
   "Aesop.Util.UnorderedArraySet":
