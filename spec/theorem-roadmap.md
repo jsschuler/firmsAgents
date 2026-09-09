@@ -601,6 +601,14 @@ Implemented in the continuous semantic Lean scaffold:
     reported checkpoints. At period 5,000 these values are 2.881, 0.501, and
     26.43. No sustained temporal drift is visible at this scale, although a
     single path cannot establish stationarity or rare-event frequencies.
+109. The high-scale implementation direction is recorded. Development moves to
+    an x86-64 platform and an Apptainer-packaged fast backend targeting up to
+    100 million agents on 16 cores and 128 GiB RAM. The optimized model will use
+    primitive structure-of-arrays state, constant-time firm aggregates,
+    allocation-free in-place events, streaming diagnostics, and resumable
+    checkpoints. It remains subordinate to the existing Julia/Lean semantics:
+    fixed-stream differential tests must establish pathwise equivalence before
+    scale gates at `10^5`, `10^6`, `10^7`, and finally `10^8` agents.
 
 The heterogeneous interior linear-response spectral argument is now complete.
 The preference-parameter continuity program is complete. Nonlinear

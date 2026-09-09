@@ -30,6 +30,11 @@ stochastic kernels, arbitrary-horizon validity preservation, and bounded
 firm-size tail observables. Julia mirrors it with exact rational transition
 matrices, stationary-distribution checks, and firm-size CCDF diagnostics.
 
+The planned 100-million-agent backend will target x86-64 and be distributed in
+an Apptainer container. Its feasibility envelope, performance gates, and
+reference-equivalence requirements are documented in
+[`docs/HIGH_SCALE_SIMULATION.md`](docs/HIGH_SCALE_SIMULATION.md).
+
 ## Julia
 
 ```sh
